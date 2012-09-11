@@ -1,0 +1,7 @@
+*.cmd
+*.o
+.tmp_versions
+Module.symvers
+qcauart.ko
+qcauart.mod.c
+modules.order

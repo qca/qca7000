@@ -1,0 +1,88 @@
+qca_tty_receive
+	netdev_priv
+	pr_debug
+	dev_alloc_skb
+	printk
+	QcaFrmFsmDecode
+	skb_tailroom
+	skb_put
+	eth_type_trans
+	netif_rx_ni
+qca_tty_wakeup
+	netdev_priv
+	dev_kfree_skb
+	clear_bit
+	pr_debug
+	netif_wake_queue
+	write
+	skb_pull
+qca_tty_open
+	netdev_priv
+	pr_debug
+	netif_carrier_on
+qca_tty_close
+	netdev_priv
+	pr_debug
+	netif_carrier_off
+qcauart_netdev_open
+	netdev_priv
+	QcaFrmFsmInit
+	netif_start_queue
+qcauart_netdev_close
+	netdev_priv
+	netif_stop_queue
+	dev_kfree_skb
+qcauart_netdev_xmit
+	netdev_priv
+	skb_headroom
+	skb_tailroom
+	skb_copy_expand
+	printk
+	dev_kfree_skb
+	skb_push
+	QcaFrmCreateHeader
+	skb_put
+	memset
+	QcaFrmCreateFooter
+	pr_debug
+	netif_stop_queue
+	set_bit
+	write
+	skb_pull
+qcauart_netdev_tx_timeout
+	netdev_priv
+	printk
+	clear_bit
+	dev_kfree_skb
+	netif_wake_queue
+qcauart_netdev_get_stats
+	netdev_priv
+qcauart_netdev_init
+	netdev_priv
+	dev_alloc_skb
+	printk
+qcauart_netdev_uninit
+	netdev_priv
+	dev_kfree_skb
+qcauart_netdev_set_mac_address
+	netif_running
+	memcpy
+	printk
+qcauart_netdev_setup
+	ether_setup
+	memcpy
+	netdev_priv
+	memset
+qcauart_mod_init
+	printk
+	tty_register_ldisc
+	alloc_netdev
+	netdev_priv
+	free_netdev
+	netif_carrier_off
+	register_netdev
+qcauart_mod_exit
+	unregister_netdev
+	tty_unregister_ldisc
+	printk
+	free_netdev

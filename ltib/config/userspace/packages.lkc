@@ -1,0 +1,3866 @@
+comment 'Package selection'
+
+menu "Package list"
+
+-source packages.lkc
+-source fsl_mm.lkc
+
+comment 'Common package selection list'
+config PKG_APPTRK
+    depends LINTARCH != arm
+    bool "Apptrk"
+    select PKG_LIBELF
+    help
+       Target interface for CodeWarrior debugging system.
+
+config PKG_ASTERISK
+    bool "asterisk"
+    select PKG_KERNEL_LEAVESRC
+    select PKG_ZAPTEL
+    select PKG_LIBTERMCAP
+    help
+      Asterisk soft PBX
+
+config PKG_ASTERISK_PRECONFIG
+    depends PKG_ASTERISK
+    string "asterisk preconfig filename"
+    default ""
+    help
+      Put in the name of the asterisk config file to use, this
+      must exist under the platform's configuration directory, for
+      instance: config/platform/mpc5200/asterisk.menuselect.makeopts
+      Setting this to the empty string will make asterisk use it's
+      own internal default configuration.
+
+config PKG_ASTERISK_WANT_CF
+    depends PKG_ASTERISK
+    bool "Configure asterisk at build time"
+    help
+      Select this if you want to interactively configure asterisk during
+      the build.  A copy of the configured value will be put back
+      into the platforms configuration directory, with the suffix .dev
+
+config PKG_ASTERISK_GUI
+    depends PKG_ASTERISK
+    bool "Asterisk gui"
+    help
+      Asterisk Web GUI.
+
+config PKG_ATK
+    depends CAP_HAS_MMU
+    select PKG_GLIB2
+    bool "atk"
+    help
+       Interfaces for accessibility support
+
+config PKG_AUTOCONF
+    depends CAP_HAS_MMU
+    bool "autoconf"
+    help
+       GNU's Autoconf is a tool for configuring source code and Makefiles.
+       Using Autoconf, programmers can create portable and configurable
+       packages, since the person building the package is allowed to specify
+       various configuration options.
+
+       You should install Autoconf if you are developing software and you
+       would like to use it to create shell scripts that will configure your
+       source code packages. If you are installing Autoconf, you will also
+       need to install the GNU m4 package.
+
+       Note that the Autoconf package is not required for the end-user who
+       may be configuring software with an Autoconf-generated script;
+       Autoconf is only required for the generation of the scripts, not their
+       use.
+
+config PKG_AUTOMAKE
+    depends CAP_HAS_MMU
+    bool "automake"
+    help
+       Automake is an experimental Makefile generator. Automake was inspired
+       by the 4.4BSD make and include files, but aims to be portable and to
+       conform to the GNU standards for Makefile variables and targets.
+
+       You should install Automake if you are developing software and would
+       like to use its ability to automatically generate GNU standard
+       Makefiles. If you install Automake, you will also need to install
+       GNU's Autoconf package.
+
+       This fails on debian as autoconf is not on the host
+
+config PKG_ALSA_LIB
+    bool "alsa-lib"
+    help
+       The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
+       functionality to the Linux operating system.  The alsa-lib user-space
+       library simplifies application programming and provides a higher level
+       of audio functionality compared to OSS.
+
+config PKG_ALSA_UTILS
+    select PKG_ALSA_LIB
+    select PKG_NCURSES
+    bool "alsa-utils"
+    help
+       This package contains the command line utilities for the ALSA project.
+       The package can be compiled only with the installed ALSA driver and
+       the ALSA C library.  Utilities include: alsaconf, alsactl, aplay/arecord,
+       amixer, alsamixer, amidi, and iecset.
+
+config PKG_BASH
+    depends CAP_HAS_MMU
+    select PKG_LIBTERMCAP
+    bool "bash"
+    help
+       The GNU project Bourne Again shell (bash) is a shell or command
+       language interpreter that is compatible with the Bourne shell (sh).
+       Bash incorporates useful features from the Korn shell (ksh) and
+       the C shell (csh) and most sh scripts can be run by bash without
+       modification.
+
+config PKG_BASH_WANT_NO_SH_SYMLINK
+    depends CAP_HAS_MMU
+    depends PKG_BASH
+    bool "Don't link bash to /bin/sh"
+    default n
+    help
+       Select y if you will have more than one shell and bash will not be
+       the default.
+       Select n if you want bash to be your default shell.
+       If in doubt, select n
+
+config PKG_BIND
+    depends CAP_HAS_MMU
+    select PKG_OPENSSL
+    bool "bind"
+    help
+       ISC's Domain Name System BIND implementation contains a DNS server
+       (named), a DNS resolver library, and DNS testing tools.
+       See: http://www.isc.org/sw/bind/
+
+config PKG_BINUTILS
+    depends CAP_HAS_MMU
+    bool "binutils"
+    help
+       Binutils is a collection of binary utilities, including ar (for
+       creating, modifying and extracting from archives), as (a family of GNU
+       assemblers), gprof (for displaying call graph profile data), ld (the
+       GNU linker), nm (for listing symbols from object files), objcopy (for
+       copying and translating object files), objdump (for displaying
+       information from object files), ranlib (for generating an index for
+       the contents of an archive), size (for listing the section sizes of an
+       object or archive file), strings (for listing printable strings from
+       files), strip (for discarding symbols), and addr2line (for converting
+       addresses to file and line).
+
+config PKG_BINUTILS_BUILD_DOCS
+    depends PKG_BINUTILS
+    bool "Build binutils documentation."
+    default n
+    help
+        This option enables building the info, pdf, and html documentation
+        for binutils.  This option requires that the development tetex package
+        is installed on the host build machine.
+
+config PKG_BISON
+    depends CAP_HAS_MMU
+    bool "bison"
+    help
+       Bison is a general purpose parser generator that converts a grammar
+       description for an LALR(1) context-free grammar into a C program to
+       parse that grammar. Bison can be used to develop a wide range of
+       language parsers, from ones used in simple desk calculators to complex
+       programming languages. Bison is upwardly compatible with Yacc, so any
+       correctly written Yacc grammar should work with Bison without any
+       changes. If you know Yacc, you should not have any trouble using
+       Bison. You do need to be proficient in C programming to be able
+       to use Bison. Bison is only needed on systems that are used for
+       development.
+
+       If your system will be used for C development, you should install
+       Bison.
+
+config PKG_BLUEZ_HCIDUMP
+    depends CAP_HAS_MMU
+    bool "bluez-hcidump"
+    select PKG_BLUEZ_LIBS
+    help
+        The hcidump utility allows the monitoring of Bluetooth activity.
+        It provides a disassembly of the Bluetooth traffic and can display
+        packets from higher level protocols such as RFCOMM, SDP and BNEP.
+        It is not required for normal Bluetooth operation, but may be
+        helpful for debugging.
+
+        hcidump is part of the BlueZ Bluetooth Linux project.
+        See http://www.bluez.org
+
+config PKG_BLUEZ_LIBS
+    depends CAP_HAS_MMU
+    bool "bluez-libs"
+    help
+        User space libraries for the BlueZ bluetooth APIs.
+
+        BlueZ is the official Linux Bluetooth protocol stack. It is an
+        Open Source project distributed under GNU General Public License (GPL).
+        See http://www.bluez.org
+
+config PKG_BLUEZ_UTILS
+    depends CAP_HAS_MMU
+    bool "bluez-utils"
+    select PKG_BLUEZ_LIBS
+    help
+        This package contains tools and system daemons for using Bluetooth
+        devices.  It is part of the BlueZ Bluetooth Linux project.
+        See http://www.bluez.org
+
+config PKG_BOA
+    bool "boa"
+    help
+      Boa is a single-tasking HTTP server. That means that unlike
+      traditional web servers, it does not fork for each incoming connection,
+      nor does it fork many copies of itself to handle multiple connections.
+      It internally multiplexes all of the ongoing HTTP connections, and
+      forks only for CGI programs (which must be separate processes),
+      automatic directory generation, and automatic file gunzipping.
+      The primary design goals of Boa are speed and security. Security,
+      in the sense of "can't be subverted by a malicious user," not "fine
+      grained access control and encrypted communications". Boa is not
+      intended as a feature-packed server.
+
+      Available rpmbuild rebuild options :
+      --with : debug access poll
+      --without : gzip sendfile
+
+config PKG_BONNIE_PLUS_PLUS
+    depends CAP_HAS_MMU
+    bool "bonnie++"
+    help
+      Bonnie++ is a benchmark suite that is aimed at performing a number of
+      simple tests of hard drive and file system performance. Then you can
+      decide which test is important and decide how to compare different
+      systems after running it.
+
+config PKG_BRIDGE_UTILS
+    depends CAP_HAS_MMU
+    bool "bridge-utils"
+    help
+      The bridge-utils package contains the bridge utility brctl which
+      is used to control bridge configuration.
+
+config PKG_BUSYBOX
+    bool "busybox"
+    help
+      Busybox is a single binary which includes versions of a large number
+      of system commands, including a shell. This package can be very
+      useful for recovering from certain types of system failures,
+      particularly those involving broken shared libraries.
+
+config PKG_BUSYBOX_PRECONFIG
+    depends PKG_BUSYBOX
+    string "busybox preconfig filename"
+    default "busybox.config"
+    help
+      Put in the name of the busybox configuration file to use, this
+      must exist under the platform's configuration directory, for
+      instance: config/platform/mpc5200/busybox.config.
+      Setting this to the empty string will make busybox use it's
+      own internal default configuration.
+
+config PKG_BUSYBOX_WANT_CF
+    depends PKG_BUSYBOX
+    bool "Configure busybox at build time"
+    help
+      Select this if you want to interactively configure busybox during
+      the build.  A copy of the configured value will be put back
+      into the platforms configuration directory, with the suffix .dev
+
+config PKG_BZIP2
+    depends CAP_HAS_MMU
+    bool "bzip2"
+    help
+      Bzip2 is a freely available, patent-free, high-quality data compressor
+      that uses the same command line flags as gzip.
+
+config PKG_CAIRO
+    depends CAP_HAS_MMU
+    select PKG_LIBPNG
+    select PKG_PIXMAN
+    select PKG_FONTCONFIG
+    bool "cairo"
+    help
+      A 2D vectorial drawing library needed by GTK from 2.8.0
+    
+config PKG_CAN4LINUX
+    bool "can4linux"
+    help
+      Userspace CANbus test programs
+
+config PKG_CANTEST
+    bool "cantest"
+    help
+      Userspace SocketCAN test program
+
+config PKG_CCACHE
+    depends CAP_HAS_MMU
+    bool "ccache"
+    help
+      C/C++ compiler cache
+
+config PKG_CHEESE
+    depends CAP_HAS_MMU
+    select PKG_HAL
+    bool "cheese"
+    help
+      Take photos and videos using webcam
+
+config PKG_CLAMAV
+    depends CAP_HAS_MMU
+    select PKG_ZLIB
+    bool "clamav"
+    help
+      Clam AntiVirus is a GPL anti-virus toolkit for UNIX.
+
+config PKG_CONNTRACK_TOOLS
+    depends CAP_HAS_MMU
+    select PKG_LIBNETFILTER_CONNTRACK
+    bool "conntrack-tools"
+    help
+        The conntrack-tools are a set of tools targeted at system
+        administrators. They are conntrack, the userspace command
+        line interface, and conntrackd, the userspace daemon. The
+        tool conntrack provides a full featured interface that is
+        intended to replace the old /proc/net/ip_conntrack interface.
+        Using conntrack, you can view and manage the in-kernel
+        connection tracking state table from userspace. On the
+        other hand, conntrackd covers the specific aspects of
+        stateful firewalls to enable highly available scenarios,
+        and can be used as statistics collector as well
+
+        conntrack-tools requires libnetfilter_conntrack,
+        libnfnetlink and a kernel that features the
+        netnetlink_conntrack subsystem. For officially
+        released kernels, this means 2.6.14, but we suggest you
+        to use 2.6.18 or later
+
+        Main features
+            * listing the contents of the conntrack table searching for
+            * individual entries in the conntrack table adding new entries to
+            * the conntrack table listing entries in the expect table adding
+            * new entries to the expect table
+
+config PKG_COREUTILS
+    depends CAP_HAS_MMU
+    bool "coreutils"
+    help
+      This package contains the GNU core utilities and includes the contents
+      of the old GNU fileutils, sh-utils, and textutils packages.
+
+config PKG_CPIO
+    depends CAP_HAS_MMU
+    bool "cpio"
+    help
+      GNU cpio copies files into or out of a cpio or tar archive.
+
+config PKG_CPUFREQUTILS
+    depends CAP_HAS_MMU
+    bool "cpufrequtils"
+    help
+      Command line tools to get and set CPU frequency.
+
+config PKG_CRACKLIB
+    depends CAP_HAS_MMU
+    bool "cracklib"
+    help
+      A Password-Checking Library.
+
+config PKG_CRAMFS
+    depends CAP_HAS_MMU
+    select PKG_ZLIB if PLATFORM != host
+    bool "cramfs"
+    help
+      A Linux filesystem designed to be simple, small, and to compress things well.
+
+config PKG_CRASHME
+    bool "crashme"
+    help
+      A random input test program.
+
+config PKG_CURL
+    depends CAP_HAS_MMU
+   bool "curl"
+   help
+     A command line tool for transferring files with URL syntax.
+
+config PKG_DAEMONIZER
+    depends CAP_HAS_MMU
+    bool "daemonizer"
+    help
+      Starting apptrk using the daemonizer allows it to run and
+      debug applications from CodeWarrior without having to login
+      into the target and to start apptrk manually.  Path to executable
+      must be fully qualified, ie.- daemon /usr/bin/apptrk :1000
+
+config PKG_DEVMEM2
+    depends CAP_HAS_MMU
+    bool "devmem2"
+    help
+      Simple program to read/write from/to any location in memory.
+      Writing or reading memory locations may corrupt your system
+      so please use this utility with extreme caution!
+
+config PKG_DHCP
+    depends CAP_HAS_MMU
+    bool "dhcp"
+    help
+      ISC's Dynamic Host Configuration Protocol distribution provides
+      a DHCP server, a DHCP client, and a DHCP relay agent.
+      See: http://www.isc.org/sw/dhcp/
+
+config PKG_DHCP_WANT_SERVER
+    depends CAP_HAS_MMU
+    depends PKG_DHCP
+    bool "Include DHCP server"
+    default y
+    help
+        Include DHCP server support.
+        Note busybox includes a DHCP server
+
+config PKG_DHCP_WANT_CLIENT
+    depends CAP_HAS_MMU
+    depends PKG_DHCP
+    bool "Include DHCP client support"
+    default n
+    help
+        Include DHCP client support, including SIP support.
+        Note busybox includes a DHCP client
+
+config PKG_DB1
+    depends CAP_HAS_MMU
+    bool "db1"
+    help
+      DB provides routines for creating simple database indexes. It is
+      used by many applications, including Python and Perl, so this should
+      be installed on all systems. This is version 1 only. It should be
+      used for building apps that require v1 support only. All new apps
+      should be written to use version 2 from glibc.
+
+config PKG_DB4
+    depends CAP_HAS_MMU
+    bool "db4"
+    help
+      This package provides different tools for manipulating databases in 
+      the Berkeley v4 database format.
+
+config PKG_DBUS
+    depends CAP_HAS_MMU
+    bool "dbus"
+    help
+      D-Bus is a message bus, used for sending messages between
+      applications. Conceptually, it fits somewhere in between raw sockets
+      and CORBA in terms of complexity.
+
+      D-Bus supports broadcast messages, asynchronous messages (thus
+      decreasing latency), authentication, and more. It is designed to be
+      low-overhead; messages are sent using a binary protocol, not using 
+      XML. D-Bus also supports a method call mapping for its messages, but
+      it is not required; this makes using the system quite simple.
+
+config PKG_DBUS_GLIB
+    depends CAP_HAS_MMU
+    bool "dbus-glib"
+    help
+      This package provides the GLib-based shared library for applications 
+      using the GLib interface to D-Bus.
+
+choice
+    prompt "device nodes"
+    default PKG_DEV
+
+    config PKG_DEV
+        bool "static device files"
+        help
+           These are the base device nodes, say yes
+
+    config PKG_MDEV
+        select PKG_BUSYBOX
+        bool "use mdev"
+        help
+           This requires you to have mdev enabled in busybox
+
+    config PKG_UDEV
+        select PKG_HOTPLUG
+        bool "udev"
+        help
+            Userspace /dev manager.
+        config PKG_UDEV_WANT_AUTOMOUNT
+            depends PKG_UDEV
+            bool "Include automount rules"
+            default n
+            help
+              Enable this to add rules that automount mass storage partitions
+
+        config PKG_UDEV_WANT_NON_RAID
+            depends PKG_UDEV
+            bool "Modify udev rules for non-raid systems"
+            default PKG_UDEV
+            help
+              Enable this to modify udev rules so that they work better
+              on systems without raid support.  Specifically, this adds the
+              '--skip-raid' argument to the vol_id command found in some udev
+              rules.  When '--skip-raid' is specified, vol_id will not probe
+              storage devices to see if they're part of a raid system.
+              This probe can cause problems for devices which incorrectly
+              report their number of sectors since the raid info is typically
+              saved in the last sector of a device.
+
+              You should enable this option if you're not using raid on the target.
+
+        config PKG_UDEV_WANT_IMX
+            depends PKG_UDEV
+            bool "Include i.MX rules"
+            default n
+            help
+              Enable this to add special rules for i.MX devices
+        
+    config PKG_DEVFSD
+        bool "devfsd dynamic device file daemon"
+        help
+          Use this when runing a kernel that uses devfs
+ 
+    config PKG_DEV_NONE
+        bool "don't install any device files/nodes"
+endchoice
+
+config PKG_DIFFUTILS
+    depends CAP_HAS_MMU
+    bool "diffutils"
+    help
+      The diffutils package includes four utilities: diff, cmp, diff3, and
+      sdiff.
+
+      The diff command compares two files and shows the differences, line by
+      line. The cmp command shows the offset and line numbers where two
+      files differ, or cmp can show the characters that differ between the
+      two files. The diff3 command shows the differences between three
+      files. Diff3 can be used when two people have made independent changes
+      to a common original; it can produce a merged file that contains both
+      sets of changes and warnings about conflicts. The sdiff command can be
+      used to merge two files interactively.
+
+      Install diffutils if you need to compare text files.
+
+config PKG_DIRECTFB
+    depends CAP_HAS_MMU
+    depends !KERNEL_NONE
+    select PKG_LIBJPEG
+    select PKG_LIBPNG
+    select PKG_FREETYPE
+    select PKG_ZLIB
+    select PKG_KERNEL_WANT_HEADERS
+    bool "DirectFB"
+    help
+      The DirectFB graphics acceleration library.
+config PKG_DIRECTFB_WANT_TS
+    depends PKG_DIRECTFB
+    select PKG_TSLIB
+    bool "configure for use with touchscreen"
+
+config PKG_DIRECTFB_EXAMPLES
+    depends CAP_HAS_MMU
+    depends PKG_DIRECTFB
+    bool "DirectFB-examples"
+    help
+      Example applications and tests for DirectFB.
+
+config PKG_DISTCC
+    depends CAP_HAS_MMU
+    bool "distcc"
+    default n
+    help
+        distcc is a program that intercepts the calls to a compiler and
+        farms the compile requests out to a group of volunteer hosts.
+        For more details see: http://distcc.samba.org/
+
+config PKG_DOSFSTOOLS
+    depends CAP_HAS_MMU
+    bool "dosfstools"
+    help
+      The dosfstools package includes the mkdosfs and dosfsck utilities,
+      which make and check MS-DOS FAT filesystems.
+
+config PKG_DROPBEAR
+    depends CAP_HAS_MMU
+    select PKG_ZLIB
+    bool "dropbear ssh client/server"
+    help
+      Dropbear is a relatively small SSH 2 server that can be linked
+      against the uClibc C runtime library. It supports the following
+      features:
+
+      * X11 forwarding, and authentication-agent forwarding
+        for OpenSSH clients
+      * Can run from inetd or standalone
+      * Compatible with OpenSSH ~/.ssh/authorized_keys public key
+        authentication
+      * The daemon, keygen, key converter, and client can be compiled
+        into a single binary
+      * TCP forwarding support
+      * Features can easily be disabled when compiling to save space
+
+config PKG_DROPBEAR_WANT_URANDOM_DEV
+    depends CAP_HAS_MMU
+    depends PKG_DROPBEAR
+    bool "non-blocking random device"
+    default y
+    help
+       Only set this if your system doesn't have enough entropy to
+       output from the /dev/random device.  Symptom are things like
+       dbclient hangs (use strace to confirm it's /dev/random).  A
+       non-blocking alternative is /dev/urandom, but this is less
+       secure.  Use this option with caution.
+
+config PKG_DROPBEAR_WANT_NO_REV_DNS
+    depends CAP_HAS_MMU
+    depends PKG_DROPBEAR
+    bool "disable reverse host lookups"
+    default y
+    help
+       This option will disable reverse DNS lookups of hosts.  These
+       will cause logins to be slow unless your DNS server is working
+       properly.
+
+config PKG_DROPBEAR_WANT_NO_X11FWD
+    depends CAP_HAS_MMU
+     depends PKG_DROPBEAR
+     bool "disable X11 forwarding"
+     default y
+     help
+        This option disables X11 port forwarding.
+
+config PKG_DROPBEAR_WANT_HACKABLE_KEY
+    depends CAP_HAS_MMU
+     depends PKG_DROPBEAR
+     bool "use an insecure hackable RSA key"
+     help
+        This option provides a canned, static, hackable RSA key.
+        This should only be used during development to avoid having
+        to keep editing your own known hosts keys file.  Please disable
+        this for any systems that need any level of security.
+
+config PKG_DTC
+    depends CAP_HAS_MMU
+    bool "dtc (and libfdt)"
+    help
+       This is the device tree compiler for flat device trees.
+       In addition, the headers/library for libfdt will be installed
+config PKG_DTC_WANT_FDT
+    depends PKG_DTC
+    bool "Install libfdt headers and libraries"
+    default y
+
+config PKG_DT_D
+    bool "dt-d"
+    help
+       The fbv program verifies proper operation of peripherals,
+       file systems, device drivers, or any data stream
+       supported by the operating system..
+
+config PKG_E2FSPROGS
+    depends CAP_HAS_MMU
+    bool "e2fsprogs"
+    help
+      The e2fsprogs package contains a number of utilities for creating,
+      checking, modifying, and correcting any inconsistencies in second
+      extended (ext2) filesystems. E2fsprogs contains e2fsck (used to
+      repair filesystem inconsistencies after an unclean shutdown), mke2fs
+      (used to initialize a partition to contain an empty ext2 filesystem),
+      debugfs (used to examine the internal structure of a filesystem, to
+      manually repair a corrupted filesystem, or to create test cases for
+      e2fsck), tune2fs (used to modify filesystem parameters), and most of
+      the other core ext2fs filesystem utilities.
+
+      You should install the e2fsprogs package if you need to manage the
+      performance of an ext2 filesystem.
+
+menu "Enlightenment window manager packages"
+choice
+    prompt "Enlightenment"
+    default CHOICE_ENLIGHTENMENT_NONE
+    help
+      Enlightenment is a X11 Window manager 
+    config CHOICE_ENLIGHTENMENT_NONE
+        bool "Do not install"
+    config CHOICE_ENLIGHTENMENT
+        bool "Install"
+endchoice
+
+    config PKG_ENLIGHTENMENT
+        depends CHOICE_ENLIGHTENMENT
+        select PKG_ECORE
+        select PKG_EFREET
+        select PKG_EMBRYO
+        select PKG_EET
+        select PKG_EVAS
+        select PKG_LIBXEXT
+        select PKG_LIBX11
+        bool "enlightenment"
+        default y
+        help
+          The Enlightenment 0.17 window manager.
+    config PKG_ECORE
+        depends CHOICE_ENLIGHTENMENT
+        depends PKG_EET
+        bool "ecore"
+        default y
+        help
+          Ecore is the event/X abstraction layer that makes doing selections,
+          Xdnd, general X stuff, event loops, timeouts and idle handlers fast,
+          optimized, and convenient. It's a separate library so anyone can make
+          use of the work put into Ecore to make this job easy for applications.
+    config PKG_EDB
+        depends CHOICE_ENLIGHTENMENT
+        bool "edb"
+        default y
+        help
+          This is a database convenience library base on db 2.7.7 from
+          http://www.sleepycat.com (see src/LICENSE for license details). It is
+          intended to make accessing database information portable, easy, fast
+          and efficient as well as bypass the proplem of libdb continuously 
+          changing formats.
+    config PKG_EDJE
+        depends CHOICE_ENLIGHTENMENT
+        depends PKG_ECORE
+        depends PKG_EMBRYO
+        depends PKG_EVAS
+        bool "edje"
+        default y
+        help
+          A graphical layout and animation library for animated resizable,
+          compressed and scalable themes.
+    config PKG_EET
+        depends CHOICE_ENLIGHTENMENT
+        select PKG_LIBJPEG
+        select PKG_ZLIB
+        bool "eet"
+        default y
+        help
+          Eet is a library for speedy data storage, retrieval, and compression.
+    config PKG_EFREET
+        depends CHOICE_ENLIGHTENMENT
+        depends PKG_ECORE
+        bool "efreet"
+        default y
+        help
+          An implementation of several specifications from freedesktop.org
+          intended for use in Enlightenment DR17 (e17) and other applications
+          using the Enlightenment Foundation Libraries (EFL).
+    config PKG_EMBRYO
+        depends CHOICE_ENLIGHTENMENT
+        bool "embryo"
+        default y
+        help
+          API to load and control interpreted programs compiled into an abstract
+          machine bytecode that it understands.
+    config PKG_EMOTION
+        depends CHOICE_ENLIGHTENMENT
+        depends PKG_EVAS
+        depends PKG_EDJE
+        depends PKG_ECORE
+        bool "emotion"
+        default y
+        help
+          Media integration library for Enlightenment          
+    config PKG_EVAS
+        depends CHOICE_ENLIGHTENMENT
+        select PKG_FREETYPE
+        bool "evas"
+        default y
+        help
+          Evas is a clean display canvas API for several target display systems.
+    config PKG_EXPEDITE
+        depends CHOICE_ENLIGHTENMENT
+        depends PKG_EVAS
+        bool "expedite"
+        default y
+        help
+          This is meant to be a detailed and comprehensive benchmark suite
+          for Evas.
+endmenu
+
+config PKG_ED
+    depends CAP_HAS_MMU
+    bool "ed"
+    help
+      Ed is a line-oriented text editor, used to create, display, and modify
+      text files (both interactively and via shell scripts). For most
+      purposes, ed has been replaced in normal usage by full-screen editors
+      (Emacs and vi, for example).
+
+      Ed was the original UNIX editor and may be used by some programs.
+      However, the more modern text editors are recommended for general use.
+
+config PKG_EEL
+    depends CAP_HAS_MMU
+    bool "eel"
+    help
+      Eazel Extensions Library for GNOME2
+
+config PKG_ENCHANT
+    depends CAP_HAS_MMU
+    bool "enchant"
+    help
+      A wrapper library for various spell checker engines.
+
+config PKG_EOG
+    depends CAP_HAS_MMU
+    select PKG_GNOME_DESKTOP
+    bool "eog"
+    help
+      Image viewer of Gnome.
+
+config PKG_EPDFVIEW
+    select PKG_GTK2
+    select PKG_POPPLER
+    bool "epdfview"
+    help
+      PDF viewer.
+
+config PKG_ETHTOOL
+    depends CAP_HAS_MMU
+    bool "ethtool"
+    help
+      This utility allows querying and changing of ethernet card settings,
+      such as speed, port, auto-negotiation, and PCI locations.
+
+config PKG_EVOLUTION
+    depends CAP_HAS_MMU
+    select PKG_EVOLUTION_DATA_SERVER
+    select PKG_GTKHTML
+    select PKG_ENCHANT
+    bool "evolution"
+    help
+      Evolution provides integrated mail, addressbook and calendaring
+      functionality to users of the Gnome Desktop.
+
+config PKG_EVOLUTION_DATA_SERVER
+    depends CAP_HAS_MMU
+    bool "evolution-data-server"
+    select PKG_ORBIT2
+    select PKG_GTK2
+    select PKG_DBUS_GLIB
+    select PKG_GLIB2
+    select PKG_PANGO
+    select PKG_CAIRO
+    select PKG_SQLITE
+    select PKG_ZLIB
+    select PKG_LIBSOUP
+    select PKG_LIBXML2
+    select PKG_LIBICONV
+    select PKG_LIBBONOBO
+    help
+      The data server, called "Evolution Data Server" is responsible for
+      managing mail, calendar, addressbook, tasks and memo information.
+
+config PKG_EVTEST
+    bool "evtest"
+    help
+      The evtest utility allows you to see the event-layer events your keyboard
+      is generating. This is for debugging to help you determine if indeed your
+      keyboard is sending events, and which events it is sending.
+
+config PKG_EXPAT
+    depends CAP_HAS_MMU
+    bool "expat"
+    help
+      Expat is a C library for parsing XML. Expat is a stream-oriented XML
+      parser; handlers are registered with the parser prior to starting the
+      parse. These handlers are then called when the parser discovers the
+      associated structures in the document being parsed. A start tag is an
+      example of the kind of structure for which handlers can be
+      registered.
+
+config PKG_FAAD2
+    depends CAP_HAS_MMU
+    bool "faad2"
+    help
+      A sound decoder library.
+
+config PKG_FAKEROOT
+    depends CAP_HAS_MMU
+    bool "fakeroot"
+    help
+      This package is intended to enable something like: fakeroot rpm
+      --rebuild i.e. to remove the need to become root for a package
+      build. This is done by setting LD_PRELOAD to a \"libfakeroot.so.0.0\",
+      that provides wrappers around chown, chmod, mknod, stat, etc.
+
+      If you don\'t understand any of this, you do not need this!
+
+config PKG_FAKE_PROVIDES
+    bool
+    default y
+
+config PKG_FARSIGHT
+    depends CAP_HAS_MMU
+    select PKG_GSTREAMER_CORE
+    select PKG_GST_PLUGINS_FARSIGHT
+    bool "farsight"
+    help
+      This package provides an audio/video conferencing framework
+
+config PKG_FBPAN
+    bool "fbpan"
+    help
+      The fbpan program allows panning the framebuffer
+      via the FBIOPAN_DISPLAY ioctl.
+
+config PKG_FBSET
+    bool "fbset"
+    help
+      The fbset utility is used for controling framebuffer devices.
+
+config PKG_FBV
+    bool "fbv"
+    select PKG_LIBJPEG
+    select PKG_LIBPNG
+    help
+      The fbv program allows displaying images on a framebuffer.
+      Supported image formats include png, jpeg and bmp.
+
+config PKG_FFMPEG
+    depends CAP_HAS_MMU
+    bool "ffmpeg"
+    help
+      Video and sound codecs and utilities.
+
+config PKG_FILE
+    depends CAP_HAS_MMU
+    depends ON_THE_IMPOSSIBLE
+    bool "file : needs fixing, inter exes"
+    help
+      The file command is used to identify a file according to the type of
+      data it contains. File can identify many different file types,
+      including ELF binaries, system libraries, RPM packages, and different
+      graphics formats.
+
+config PKG_FINDUTILS
+    depends CAP_HAS_MMU
+    bool "findutils"
+    help
+      The findutils package contains programs which will help you locate
+      files on your system. The find utility searches through a hierarchy
+      of directories looking for files which match a certain set of criteria
+      (such as a filename pattern). The xargs utility builds and executes
+      command lines from standard input arguments (usually lists of file
+      names generated by the find command).
+
+
+config PKG_FLEX
+    depends CAP_HAS_MMU
+    bool "flex"
+    help
+      The flex program generates scanners. Scanners are programs which can
+      recognize lexical patterns in text. Flex takes pairs of regular
+      expressions and C code as input and generates a C source file as
+      output. The output file is compiled and linked with a library to
+      produce an executable. The executable searches through its input for
+      occurrences of the regular expressions. When a match is found, it
+      executes the corresponding C code.
+
+      Flex was designed to work with both Yacc and Bison, and is used by many
+      programs as part of their build process.
+
+config PKG_FMTOOLS
+    bool "fmtools"
+    help
+     simple Video for Linux radio card programs
+
+config PKG_FONTCONFIG
+   depends CAP_HAS_MMU
+   select PKG_EXPAT
+   select PKG_FREETYPE
+   select PKG_ZLIB
+   bool "fontconfig"
+   help
+     Fontconfig is designed to locate fonts within the system and
+     select them according to application requirements
+
+config PKG_FREETYPE
+    depends CAP_HAS_MMU
+    bool "freetype"
+    help
+      The FreeType engine is a free and portable TrueType font rendering
+      engine, developed to provide TrueType support for a variety of
+      platforms and environments. FreeType is a library that can open and
+      manage font files, as well as efficiently load, hint, and render
+      individual glyphs. FreeType is not a font server or a complete
+      text-rendering library.
+
+
+config PKG_GAWK
+    depends CAP_HAS_MMU
+    bool "gawk"
+    help
+      The gawk packages contains the GNU version of awk, a text processing
+      utility. Awk interprets a special-purpose programming language to do
+      quick and easy text pattern matching and reformatting jobs.
+
+      Install the gawk package if you need a text processing utility. Gawk
+      is considered to be a standard Linux tool for processing text.
+
+config PKG_GCONF_DBUS
+    depends CAP_HAS_MMU
+    select PKG_POPT
+    select PKG_LIBXML2
+    select PKG_GTK2
+    select PKG_DBUS
+    bool "gconf-dbus"
+    help
+      GNOME Configuration Settings library
+
+config PKG_GDBM
+    depends CAP_HAS_MMU
+    bool "gdbm"
+    help
+      Gdbm is a GNU database indexing library, including routines which use
+      extensible hashing. Gdbm works in a similar way to standard UNIX dbm
+      routines. Gdbm is useful for developers who write C applications and
+      need access to a simple and efficient database or who are building C
+      applications which will use such a database.
+
+config PKG_GCC_BUILD_ENABLED
+    depends PKG_GCC_NAME != nobuild
+    depends CAP_HAS_MMU
+    select PKG_BINUTILS
+    select PKG_LIBC_WANT_HEADERS1
+    select PKG_LIBC_WANT_STATIC_LIBS
+    select PKG_GMP
+    select PKG_MPFR
+    bool "gcc"
+    help
+      The gcc package includes the cc and gcc GNU compilers for compiling C
+      code.
+
+config PKG_GCC
+    depends PKG_GCC_BUILD_ENABLED
+    string
+    default PKG_GCC_NAME
+
+config PKG_GDB
+    bool "gdb"
+    help
+      GDB, the GNU debugger, allows you to debug programs written in C, C++,
+      and other languages, by executing them in a controlled fashion and
+      printing their data.
+
+config PKG_GDB_NATIVE_WANT_ED
+    depends PKG_GDB && CAP_HAS_MMU
+    select PKG_LIBTERMCAP
+    select PKG_NCURSES
+    bool "gdb to run natively on the target"
+    help
+        Select this if you want to build a full gdb to run on the target.
+        This will be built and placed in the 'bin' directory within ltib.
+
+config PKG_GDB_CROSS_WANT_ED
+    depends PKG_GDB
+    select PKG_GDB_SERVER_WANT_ED
+    bool "cross gdb (runs on build machine)"
+    help
+        Select this if you want to build a cross gdb that will run on
+        the build machine.  To use this, you need to run gdbserver
+        on the target and attach to it
+
+config PKG_GDB_XML_WANT_ED
+    depends PKG_GDB && ( PKG_GDB_NATIVE_WANT_ED || PKG_GDB_CROSS_WANT_ED ) && CAP_HAS_MMU
+    select PKG_EXPAT
+    bool "XML support"
+    help
+        Select this if you want XML support for GDB.
+
+config PKG_GDB_SERVER_WANT_ED
+    depends PKG_GDB
+    bool "gdbserver to run natively on the target"
+    help
+        Select this if you want to build a gdbserver to run on the target.
+        This requires the support of a cross-gdb on the host to actually
+        query the executable files symbol table and do the display.
+
+config PKG_GDB_BUILD_DOCS
+    depends PKG_GDB
+    bool "Build gdb documentation."
+    default n
+    help
+        This option enables building the info, pdf, and html documentation
+        for gdb.  This option requires that the development tetex package
+        is installed on the host build machine.
+
+config PKG_GENEXT2FS
+    depends CAP_HAS_MMU
+    bool "genext2fs"
+    help
+        Utility to produce ext2 images without having to be root
+
+config PKG_GENROMFS
+    depends CAP_HAS_MMU
+    bool "genromfs"
+    help
+        Utility for creating romfs filesystems without having to be root
+
+config PKG_GEN_INIT_CPIO
+    depends CAP_HAS_MMU
+    bool "gen_init_cpio"
+    help
+        Utility to help building initramfs filesystems
+
+config PKG_GETTEXT
+    depends CAP_HAS_MMU
+    bool "gettext"
+    help
+      The GNU gettext package provides a set of tools and documentation for
+      producing multi-lingual messages in programs. Tools include a set of
+      conventions about how programs should be written to support message
+      catalogs, a directory and file naming organization for the message
+      catalogs, a runtime library which supports the retrieval of translated
+      messages, and stand-alone programs for handling the translatable and
+      the already translated strings. Gettext provides an easy to use
+      library and tools for creating, using, and modifying natural language
+      catalogs and is a powerful and simple method for internationalizing
+      programs.
+
+config PKG_GIT
+    depends CAP_HAS_MMU
+    bool "git"
+    help
+      Core git tools
+
+config PKG_GLIB2
+    depends CAP_HAS_MMU
+    select PKG_LIBICONV if UCLIBC
+    select PKG_GETTEXT if UCLIBC
+    bool "glib2"
+    help
+      This library provides various Gnome and common functions.
+
+config PKG_GMP
+    depends CAP_HAS_MMU
+    bool "gmp"
+    help
+      GNU Multiple Precision Arithmetic Library
+
+      GMP is a free library for arbitrary precision arithmetic, operating
+      on signed integers, rational numbers, and floating point numbers.
+      There is no practical limit to the precision except the ones implied
+      by the available memory in the machine GMP runs on. GMP has a rich set
+      of functions, and the functions have a regular interface.
+
+      The main target applications for GMP are cryptography applications
+      and research, Internet security applications, algebra systems,
+      computational algebra research, etc.
+
+config PKG_GNOME_DESKTOP
+    depends CAP_HAS_MMU
+    bool "gnome-desktop"
+    help
+      Core graphics files and icons for GNOME.
+
+config PKG_GNOME_MIME_DATA
+    depends CAP_HAS_MMU
+    bool "gnome-mime-data"
+    help
+      MIME data for GNOME.
+
+config PKG_GNOME_ICON_THEME
+    depends CAP_HAS_MMU
+    bool "gnome-icon-theme"
+    help
+      Icon themes for GNOME.
+
+config PKG_GNOME_VFS
+    depends CAP_HAS_MMU
+    select PKG_GLIB2
+    select PKG_GCONF_DBUS
+#    select PKG_AVAHI
+#    select PKG_HAL
+    select PKG_GNOME_MIME_DATA
+    select PKG_BZIP2
+    bool "gnome-vfs"
+    help
+      GNOME VFS is the GNOME virtual file system. It is the foundation of
+      the Nautilus file manager. It provides a modular architecture and
+      ships with several modules that implement support for file systems, 
+      http, ftp and others. It provides a URI-based API, a backend 
+      supporting asynchronous file operations, a MIME type manipulation 
+      library and other features.
+
+config PKG_GNOME_KEYRING
+    depends CAP_HAS_MMU
+    select PKG_LIBGCRYPT
+    select PKG_LIBTASN1
+    select PKG_GTK2
+    select PKG_GCONF_DBUS
+    bool "gnome-keyring"
+    help
+      A library for GNOME.
+
+config PKG_GPSD
+    bool "gpsd"
+    help
+      gpsd is a daemon that monitors one or more GPSs attached to a
+      computer. It makes GPS data available to multiple GPS client
+      applications. See the project home page: http://gpsd.berlios.de/
+      for more information.
+
+config PKG_GPSD_WANT_PYTHON
+    depends PKG_GPSD && PKG_PYTHON
+    bool "Include Python support"
+    default n
+    help
+      Enable this to build and install Python libraries and tools.
+
+config PKG_GREP
+    depends CAP_HAS_MMU
+    bool "grep"
+    help
+      The GNU versions of commonly used grep utilities. Grep searches
+      through textual input for lines which contain a match to a specified
+      pattern and then prints the matching lines. GNU's grep utilities
+      include grep, egrep, and fgrep.
+
+      You should install grep on your system, because it is a very useful
+      utility for searching text.
+
+
+config PKG_GROFF
+    depends CAP_HAS_MMU
+    bool "groff"
+    help
+      Groff is a document formatting system. Groff takes standard text and
+      formatting commands as input and produces formatted output. The
+      created documents can be shown on a display or printed on a printer.
+      Groff's formatting commands allow you to specify font type and size,
+      bold type, italic type, the number and size of columns on a page, and
+      more.
+
+      Groff can also be used to format man pages. If you are going to use
+      groff with the X Window System, you will also need to install the
+      groff-gxditview package.
+
+config PKG_GRUB
+    depends CAP_HAS_MMU
+    depends ON_THE_IMPOSSIBLE
+    bool "grub : TBD"
+    help
+      GRUB (Grand Unified Boot Loader) is a boot loader capable of booting
+      into most free operating systems - Linux, FreeBSD, NetBSD, GNU Mach,
+      and others as well as most commercial operating systems.
+
+config PKG_GSTREAMER_CORE
+    depends CAP_HAS_MMU
+    select PKG_GLIB2
+    select PKG_LIBXML2
+    select PKG_LIBOIL
+    bool "gstreamer"
+    help
+      This package provides the GStreamer audio/video Framework.
+
+config PKG_GST_PLUGINS_BASE
+    depends CAP_HAS_MMU
+    depends PKG_GSTREAMER_CORE
+    select PKG_ALSA_LIB
+    bool "gstreamer-plugins-base"
+    help
+          This package provides the GStreamer Plugins Base.
+
+config PKG_GST_PLUGINS_GOOD
+    depends CAP_HAS_MMU
+    select PKG_GST_PLUGINS_BASE
+    depends PKG_GSTREAMER_CORE
+    bool "gstreamer-plugins-good"
+    help
+          This package provides the Good GStreamer Plugins.
+
+config PKG_GST_PLUGINS_BAD
+    depends CAP_HAS_MMU
+    select PKG_ZLIB
+    select PKG_GST_PLUGINS_BASE
+    depends PKG_GSTREAMER_CORE
+    bool "gstreamer-plugins-bad"
+    help
+          This package provides the Bad GStreamer Plugins.
+
+config PKG_GST_PLUGINS_UGLY
+    depends CAP_HAS_MMU
+    select PKG_GST_PLUGINS_BASE
+    depends PKG_GSTREAMER_CORE
+    bool "gstreamer-plugins-ugly"
+    help
+          This package provides the Ugly GStreamer Plugins.
+
+config PKG_GST_PLUGINS_FFMPEG
+    depends CAP_HAS_MMU
+    select PKG_GST_PLUGINS_BASE
+    depends PKG_GSTREAMER_CORE
+    bool "gstreamer FFmpeg plugins"
+    help
+          The FFmpeg GStreamer Plugins.
+
+config PKG_GST_PLUGINS_FARSIGHT
+    depends CAP_HAS_MMU
+    bool "gstreamer farsight plugins"
+    help
+           Set of plugins for Gstreamer used Audio/Video conferencing
+
+config PKG_GTK2
+    depends CAP_HAS_MMU
+    select PKG_PANGO
+    select PKG_LIBTIFF
+    select PKG_LIBJPEG
+    select PKG_ATK
+    select PKG_CAIRO
+    bool "gtk+"
+    help
+      The GIMP ToolKit (GTK+), a library for creating GUIs
+
+config PKG_GTKHTML
+    depends CAP_HAS_MMU
+    bool "gtkhtml"
+    help
+      HTML rendering/editing library.
+
+config PKG_HAL
+    depends CAP_HAS_MMU
+    bool "hal"
+    help
+      Hardware abstraction layer
+
+config PKG_HDPARM
+    depends CAP_HAS_MMU
+    bool "hdparm"
+    help
+      Hdparm is a useful system utility for setting (E)IDE hard drive
+      parameters. For example, hdparm can be used to tweak hard drive
+      performance and to spin down hard drives for power conservation.
+
+
+config PKG_HELLOWORLD
+    depends CAP_HAS_MMU
+    bool "hello world"
+    help
+        simple hello world c/c++ test programs
+
+config PKG_HELLOWORLD_MOD
+    depends CAP_HAS_MMU
+    select PKG_KERNEL_LEAVESRC
+    bool "hello world module example"
+    help
+        simple hello world kernel modules example
+
+config PKG_HESIOD
+    depends CAP_HAS_MMU
+    depends GLIBC
+    bool "hesiod"
+    help
+      Hesiod libraries and sample programs.
+
+config PKG_HOTPLUG
+    depends CAP_HAS_MMU
+    bool "hotplug"
+    help
+      The term "hotplugging" refers to the dynamic reconfiguration performed
+      after a device has been attached to a running system. This package
+      contains the application which is called by the kernel when a USB
+      device is added; hotplug then loads the required modules for that
+      device.
+
+config PKG_HTTPD
+    depends CAP_HAS_MMU
+   select PKG_EXPAT
+   bool "httpd (apache) web server"
+   help
+     Apache is a powerful, full-featured, efficient, and freely-available
+     Web server. Apache is also the most popular Web server on the
+     Internet.
+
+config PKG_I2C_TOOLS
+    bool "i2c-tools"
+    help
+      This package contains all the basic i2c code, as well as a few bus
+      drivers (both the algorithm and the adapter drivers). There are no
+      real chip drivers, so on its own it is not very useful. Lots of chip
+      drivers, as well as more bus drivers and some additional basic code
+      (for SMBus emulation over i2c) and some i2c debugging tools
+      are found in the lm_sensors package at http://www.lm-sensors.nu.
+      Another place at which I2C is used is the video4linux project.
+
+config PKG_IOZONE
+    depends CAP_HAS_MMU
+    bool "iozone"
+    help
+       IOZONE : IOzone is a filesystem benchmark tool. The benchmark generates
+       and measures a variety of file operations.The benchmark tests file I/O
+       performance for the following operations:
+       Read, write, re-read, re-write, read backwards, read strided, fread,
+       fwrite, random read, pread ,mmap, aio_read, aio_write.
+
+config PKG_INPUT_UTILS
+    bool "input-utils"
+    help
+       This package contains evtest utility from Linux console project
+
+config PKG_IPROUTE
+    depends CAP_HAS_MMU
+    depends !KERNEL_NONE
+    select PKG_KERNEL_WANT_HEADERS
+    bool "iproute(2)"
+    help
+       The iproute package contains networking utilities (ip and rtmon, for
+       example) which are designed to use the advanced networking
+       capabilities of the Linux kernel.
+
+config PKG_INETUTILS
+    depends CAP_HAS_MMU
+    bool "inetutils"
+    help
+      InetUtils is a collection of common network programs. It includes
+      (amongst others):
+        An ftp client and server.
+        A telnet client and server.
+        An rsh client and server.
+        An rlogin client and server.
+        A tftp client and server.
+      These are improved versions of programs originally from BSD.
+
+config PKG_IPERF
+    bool "iperf"
+    help
+      Iperf is a tool to measure IP bandwidth using UDP or TCP. It allows
+      for tuning various parameters, and reports bandwidth, delay jitter,
+      and packet loss. It supports IPv6 and multicast.
+
+choice
+    prompt "IPsec suite"
+    default PKG_IPSEC_SUITE_NONE
+    help
+      You may choose either Openswan or Strongswan as an additional
+      suite of tools for management of IPsec.
+
+    config PKG_OPENSWAN
+        depends CAP_HAS_MMU
+        select PKG_IPSEC_TOOLS
+        select PKG_GMP
+        select PKG_IPTABLES
+        select PKG_PERL
+        bool "openswan"
+        help
+          Openswan is an Open Source implementation of IPsec for the Linux
+          operating system. Is it a code fork of the FreeS/WAN project,
+          started by a few of the developers who were growing frustrated
+          with the politics surrounding the FreeS/WAN project.
+
+    config PKG_STRONGSWAN
+        depends CAP_HAS_MMU
+        select PKG_GMP
+        bool "strongswan"
+        help
+          strongSwan is a complete IPsec and IKEv1 implementation for Linux 2.4
+          and 2.6 kernels. It also fully supports the new IKEv2 protocol with
+          Linux 2.6 kernels.  It interoperates in both IKEv1 and IKEv2 mode
+          with most other IPsec-based VPN products. The focus of the strongSwan
+          project is on strong authentication mechanisms using X.509 public key
+          certificates and optional secure storage of private keys on
+          smartcards through a standardized PKCS#11 interface. A unique feature
+          is the use of X.509 attribute certificates to implement advanced
+          access control schemes based on group memberships.
+
+    config PKG_IPSEC_SUITE_NONE
+        bool "Don't install an IPsec suite"
+        help
+          If you don't install openswan or strongswan, depending on your needs
+          you may be able to use the package ipsec-tools to manage IPsec configuration.
+endchoice
+
+config PKG_IPSEC_TOOLS
+    depends CAP_HAS_MMU
+    depends !KERNEL_NONE
+    select PKG_FLEX
+    select PKG_OPENSSL
+    select PKG_KERNEL_WANT_HEADERS
+    bool "ipsec-tools"
+    help
+      IPsec-Tools is a port of KAME's IPsec utilities to the Linux-2.6
+      IPsec implementation. It supports NetBSD and FreeBSD as well.
+
+      Contents:
+
+      libipsec
+          Library with PF_KEY implementation.
+      setkey
+          Tool to manipulate and dump the kernel Security Policy
+          Database (SPD) and Security Association Database (SAD).
+      racoon
+          Internet Key Exchange (IKE) daemon for automatically
+          keying IPsec connections.
+      racoonctl
+          A shell-based control tool for racoon
+
+config PKG_IPSECADM
+    depends CAP_HAS_MMU
+    bool "ipsecadm"
+    help
+      ipsec_tunnel provides support for IPSec IPv4 tunnels utilizing
+      CryptoAPI. The IPsec tunnel implementation is divided into two parts,
+      one kernel module called ipsec_tunnel.o, and a tool to administrate
+      security associations and tunnels, called ipsecadm. This package
+      contains ipsecadm, helper scripts and documentation.
+
+config PKG_IPTABLES
+    depends CAP_HAS_MMU
+    depends !KERNEL_NONE
+    bool "iptables"
+    help
+        iptables is the userspace command line program used to configure the Linux 2.4.x and 2.6.x
+        IPv4 packet filtering ruleset. It is targeted towards system administrators
+
+        Since Network Address Translation is also configured from the packet filter ruleset,
+        iptables is used for this, too
+
+        The iptables package also includes ip6tables. ip6tables is used for configuring the IPv6
+        packet filter
+
+        iptables requires a kernel that features the ip_tables packet filter. This includes all
+        2.4.x and 2.6.x kernel releases
+
+        Main Features
+            * listing the contents of the packet filter ruleset
+            * adding/removing/modifying rules in the packet filter ruleset
+            * listing/zeroing per-rule counters of the packet filter ruleset
+
+config PKG_IPUTILS
+    depends CAP_HAS_MMU
+    bool "iputils"
+    help
+      Utilities for converting IP addresses and masks between various formats.
+
+config PKG_IRATTACH
+    depends CAP_HAS_MMU
+    bool "irattach"
+    help
+      IrDA(TM) (Infrared Data Association) is an industry standard for
+      wireless, infrared communication between devices. IrDA speeds range
+      from 9600 bps to 4 Mbps, and IrDA can be used by many modern devices
+      including laptops, LAN adapters, PDAs, printers, and mobile phones.
+
+      The Linux-IrDA project is a GPL'd implementation, written from
+      scratch, of the IrDA protocols. Supported IrDA protocols include
+      IrLAP, IrLMP, IrIAP, IrTTP, IrLPT, IrLAN, IrCOMM and IrOBEX.
+
+      The irda-utils package contains a collection of programs that enable
+      the use of IrDA protocols. Most IrDA features are implemented in the
+      kernel, so IrDA support must be enabled in the kernel before any IrDA
+      tools or programs can be used. Some configuration outside the kernel
+      is required, however, and some IrDA features, like IrOBEX, are
+      actually implemented outside the kernel.
+
+config PKG_IRDADUMP
+    depends CAP_HAS_MMU
+    bool "irdadump"
+    help
+      irdadump is a tool that monitors IrDA traffic.
+
+config PKG_ISO_CODES
+    depends CAP_HAS_MMU
+    bool "iso-codes"
+    help
+      ISO code lists and translations
+
+config PKG_KBD
+    depends CAP_HAS_MMU
+    bool "kbd : TBD"
+    help
+      Keytable files and keyboard utilities
+
+      The kbd package contains tools for managing a Linux
+      system's console's behavior, including the keyboard, the screen
+      fonts, the virtual terminals and font files.
+
+config PKG_KEYFUZZ
+    depends CAP_HAS_MMU
+    bool "keyfuzz"
+    help
+      Input device utility which allows remapping input subsystem keys.
+      Display keymap with: keyfuzz -g > keyMap
+      Modify keymap with: keyfuzz -s < newKeyMap
+
+config PKG_KRB5
+    depends CAP_HAS_MMU
+    select PKG_NCURSES
+    bool "Kerberos 5 authentication"
+    help
+      Kerberos is a network authentication system and includes 
+      kinit, klist, kdestroy, kpasswd as well as kerberized versions of
+      telnet and ftp.
+
+config PKG_LESS
+    depends CAP_HAS_MMU
+    select PKG_LIBTERMCAP
+    bool "less"
+    help
+      The less utility is a text file browser that resembles more, but has
+      more capabilities. Less allows you to move backwards in the file as
+      well as forwards. Since less does not have to read the entire input
+      file before it starts, less starts up more quickly than text editors.
+
+config PKG_LFS_UTILS
+    depends CAP_HAS_MMU
+    bool "LFS utilities"
+    help
+      The Lfs-Utils package contains some miscellaneous programs used
+      by various packages, but are not large enough to warrant their
+      own individual package.
+
+      Installed programs: mktemp, tempfile, http-get and iana-net
+
+      Installed files: protocols, services
+
+config PKG_LIBERATION_FONTS
+    bool "Liberation fonts"
+    help
+       Red Hat Sans, Serif, and Mono fonts.
+
+config PKG_LIBART_LGPL
+    depends CAP_HAS_MMU
+    bool "libart_lgpl"
+    help
+      A library for GNOME.
+
+config PKG_LIBBONOBO
+    depends CAP_HAS_MMU
+    select PKG_GLIB2
+    select PKG_ORBIT2
+    bool "libbonobo"
+    help
+      A library for GNOME.
+
+config PKG_LIBBONOBOUI
+    depends CAP_HAS_MMU
+    select PKG_LIBBONOBO
+    select PKG_LIBGNOME
+    select PKG_LIBGNOMECANVAS
+    bool "libbonoboui"
+    help
+      A library for GNOME.
+
+config PKG_LIBGCRYPT
+    depends CAP_HAS_MMU
+    select PKG_LIBGPG_ERROR
+    bool "libgcrypt"
+    help
+      libgcrypt contains cryptographic functions. Many important free
+      ciphers, hash algorithms and public key signing algorithms have
+      been implemented: arcfour, blowfish, cast5, DSA, DSA2, des, 3DES, 
+      elgamal, MD5, rijndael, RMD160, RSA, SEED, SHA1, SHA-384, SHA-512, 
+      twofish, tiger.
+
+config PKG_LIBGPG_ERROR
+    depends CAP_HAS_MMU
+    bool "libgpg-error"
+    help
+      Library that defines common error values for all GnuPG components.
+      Among these are GPG, GPGSM, GPGME, GPG-Agent, libgcrypt, pinentry,
+      SmartCard Daemon and possibly more in the future.
+
+config PKG_LIBGLADE
+    depends CAP_HAS_MMU
+    select PKG_PYTHON
+    bool "libglade"
+    help
+      A library for GNOME.
+
+config PKG_LIBGNOME
+    depends CAP_HAS_MMU
+    select PKG_GLIB2
+    select PKG_GNOME_VFS
+    select PKG_LIBBONOBO
+    bool "libgnome"
+    help
+      A library for GNOME.
+
+config PKG_LIBGNOMECANVAS
+    depends CAP_HAS_MMU
+    select PKG_GTK2
+    select PKG_LIBART_LGPL
+    select PKG_PANGO
+    select PKG_LIBGLADE
+    bool "libgnome"
+    help
+      A library for GNOME.
+
+config PKG_LIBGNOMEUI
+    depends CAP_HAS_MMU
+    select PKG_LIBGNOME
+    select PKG_GNOME_KEYRING
+    select PKG_GLADE
+    select PKG_LIBBONOBOUI
+    bool "libgnomeui"
+    help
+      A library for GNOME.
+
+config PKG_LIBICONV
+    depends CAP_HAS_MMU
+    bool "libiconv"
+    help
+       This library is part of glibc and so is normally only need for
+       uClibc when building some packages such as glib2
+
+config PKG_LIBIDL
+    depends CAP_HAS_MMU
+    bool "libidl"
+    help
+
+config PKG_LIBID3TAG
+    depends CAP_HAS_MMU
+    select PKG_ZLIB
+    bool "libid3tag"
+    help
+      This library provides support for reading and (eventually) writing
+      ID3 tags, both ID3v1 and the various versions of ID3v2.
+
+config PKG_LIBMAD
+    depends CAP_HAS_MMU
+    select PKG_LIBID3TAG
+    bool "libmad"
+    help
+      This library provides a high-quality MPEG audio decoder.
+      It currently supports MPEG-1 and the MPEG-2 extension to
+      Lower Sampling Frequencies, as well as the so-called MPEG 2.5
+      format. All three audio layers (Layer I, Layer II, and Layer III
+      a.k.a. MP3) are fully implemented.
+
+config PKG_LIBMPEG2
+    depends CAP_HAS_MMU
+    bool "libmpeg2"
+    help
+      This library provides MPEG2 video decoding.
+
+config PKG_LIBNETFILTER_CONNTRACK
+    depends CAP_HAS_MMU
+    select PKG_LIBNFNETLINK
+    bool "libnetfilter_conntrack"
+    help
+        libnetfilter_conntrack is a userspace library providing a programming interface (API) to the
+        in-kernel connection tracking state table
+
+        libnetfilter_conntrack has been previously known as libnfnetlink_conntrack and libctnetlink
+
+        libnetfilter_conntrack is used by conntrack
+
+        libnetfilter_conntrack requires libnfnetlink and a kernel that includes the
+        nfnetlink_conntrack subsystem (i.e. 2.6.14 or later)
+
+        Main features
+            * listing/retrieving entries from the kernel connection tracking table
+            * inserting/modifying/deleting entries from the kernel connection tracking table
+            * listing/retrieving entries from the kernel expect table
+            * inserting/modifying/deleting entries from the kernel expect table
+
+config PKG_LIBNFNETLINK
+    depends CAP_HAS_MMU
+    bool "libnfnetlink"
+    help
+        libnfnetlink is the low-level library for netfilter related kernel/userspace communication.
+        It provides a generic messaging infrastructure for in-kernel netfilter subsystems (such as
+        nfnetlink_log, nfnetlink_queue, nfnetlink_conntrack) and their respective users and/or
+        management tools in userspace
+
+        This library is not meant as a public API for application developers. It is only used by
+        other netfilter.org projects, such as libnetfilter_log, libnetfilter_queue or
+        libnetfilter_conntrack
+
+        libnfnetlink requires and a kernel that features the nfnetlink subsystem. This includes all
+        2.6.x kernels >= 2.6.14
+
+        Main features
+            * low-level nfnetlink message processing functions
+
+config PKG_LIBJPEG
+    bool "libjpeg"
+    help
+      This library contains the sixth public release of the
+      Independent JPEG Group's free JPEG software.
+
+
+config PKG_LIBELF
+    bool "libelf"
+    help
+      This library gives you access to the internals of the ELF object
+      file format. It lets you poke around in the various different
+      sections of an ELF file, check out the symbols, etc.
+
+config PKG_LIBNET
+    bool "libnet"
+    help
+      user-level packet construction and injection
+      Libnet is a high-level API (toolkit) allowing the application programmer
+      to construct and inject network packets. It provides a portable and
+      simplified interface for low-level network packet shaping, handling and injection.
+
+config PKG_LIBOGG
+    depends CAP_HAS_MMU
+    bool "libogg"
+    help
+      This library contains functions for OGG multimedia container
+
+config PKG_LIBPCAP
+    depends CAP_HAS_MMU
+    bool "libpcap"
+    help
+      user-level packet capture
+      Libpcap provides a portable framework for low-level network
+      monitoring. Libpcap can provide network statistics collection,
+      security monitoring and network debugging. Since almost every system
+      vendor provides a different interface for packet capture, the libpcap
+      authors created this system-independent API to ease in porting and to
+      alleviate the need for several system-dependent packet capture modules
+      in each application.
+
+      Install libpcap if you need to do low-level network traffic monitoring
+      on your network.
+
+config PKG_LIBPNG
+    select PKG_ZLIB
+    bool "libpng"
+    help
+      This library contains functions for PNG graphics.
+
+config PKG_LIBOIL
+    depends CAP_HAS_MMU
+    select PKG_GLIB2
+    bool "liboil"
+    help
+      This library provides processor optimized common library
+      routines for common functions.
+
+config PKG_LIBRSVG
+    depends CAP_HAS_MMU
+    bool "librsvg"
+    help
+      Renderer library for SVG files
+
+config PKG_LIBSOUP
+    depends CAP_HAS_MMU
+    bool "libsoup"
+    help
+      An HTTP library implementation in C. It was originally part of a
+      SOAP (Simple Object Access Protocol) implementation called Soup, but
+      the SOAP and non-SOAP parts have now been split into separate packages.
+
+      libsoup uses the Glib main loop and is designed to work well with GTK 
+      applications. This enables GNOME applications to access HTTP servers
+      on the network in a completely asynchronous fashion, very similar to
+      the Gtk+ programming model (a synchronous operation mode is also 
+      supported for those who want it).
+
+config PKG_LIBTASN1
+    depends CAP_HAS_MMU
+    select PKG_GLIB2
+    bool "libtasn1"
+    help
+      Library to manage ASN1 (Abstract Syntax Notation One) structures.
+
+config PKG_LIBTERMCAP
+    bool "libtermcap"
+    help
+      The libtermcap package contains a basic system library needed to
+      access the termcap database. The termcap library supports easy access
+      to the termcap database, so that programs can output character-based
+      displays in a terminal-independent manner.
+
+config PKG_LIBTIFF
+    depends CAP_HAS_MMU
+    bool "libtiff"
+    help
+      A library of functions for manipulating TIFF format image files
+
+config PKG_LIBTOOL
+    depends CAP_HAS_MMU
+    bool "libtool"
+    help
+      The libtool package contains the GNU libtool, a set of shell scripts
+      which automatically configure UNIX and UNIX-like architectures to
+      generically build shared libraries. Libtool provides a consistent,
+      portable interface which simplifies the process of using shared
+      libraries.
+
+config PKG_LIBUSB
+    depends CAP_HAS_MMU
+    bool "libusb"
+    help
+      This package provides a way for applications to access USB devices.
+
+config PKG_LIBXML2
+    depends CAP_HAS_MMU
+    bool "libxml2"
+    help
+      This library lets you manipulate XML files. It includes support to
+      read, modify, and write XML and HTML files. It has DTD support,
+      including parsing and validation, even with complex DTDs.
+
+config PKG_LIGHTMEDIASCANNER
+    depends PKG_SQLITE
+    depends PKG_EDJE
+    bool "lightmediascanner"
+    default y
+    help
+        Lightweight media scanner meant to be used in not-so-powerful devices,
+        like embedded systems or old machines.
+        Provides an optimized way to recursively scan directories, handling
+        the parser in a child process, avoiding breaks of the main process
+        when parsers break (quite common with such bad libs and tags).
+
+config PKG_LINUX_ATM
+    depends CAP_HAS_MMU
+    select PKG_FLEX
+    bool "linux-atm"
+    help
+      Drivers and tools to support ATM networking under Linux.
+
+config PKG_LINUX_WLAN
+    depends CAP_HAS_MMU
+    bool "linux-wlan"
+    help
+      IEEE 802.11 wireless LAN support.
+
+config PKG_MPFR
+    depends CAP_HAS_MMU
+    bool "mpfr"
+    help
+      The MPFR library is a C library for multiple-precision floating-point
+      computations with correct rounding.  The main goal of MPFR is to provide
+      a library for multiple-precision floating-point computation which is
+      both efficient and has a well-defined semantics. 
+
+config PKG_LKC
+    select PKG_NCURSES if PLATFORM != host
+    depends CAP_HAS_MMU
+    bool "lkc"
+    help
+       Linux Kernel Config parser
+
+config PKG_LOGROTATE
+    select PKG_POPT
+    depends CAP_HAS_MMU
+    bool "logrotate"
+    help
+       Rotates, compresses, removes and mails system log files.
+       Note not needed if you're using busybox's syslog
+
+config PKG_LTP
+    depends CAP_HAS_MMU
+    bool "ltp : Linux Test Project"
+    help
+       Test suite for Linux systems
+
+config PKG_LMBENCH
+    depends CAP_HAS_MMU
+    bool "lmbench"
+    help
+       Performance test tools.  See http://lmbench.sourceforge.net
+
+config PKG_LM_SENSORS
+    bool "lm_sensors"
+    help
+       Build and provide some essential tools for monitoring the hardware health
+       of Linux systems containing hardware health monitoring hardware such as 
+       the LM78 and LM75.
+
+config PKG_LRZSZ
+    depends CAP_HAS_MMU
+    bool "lrzsz"
+    help
+       rx, rb, rz, sx, sb, sz - XMODEM, YMODEM, ZMODEM file receive and
+       transmit.
+
+config PKG_LZO
+    bool "lzo"
+    help
+       LZO is a portable lossless data compression library written in ANSI C.
+       It offers pretty fast compression and *extremely* fast decompression.
+
+config PKG_M4
+    depends CAP_HAS_MMU
+    bool "m4"
+    help
+      M4 is a GNU implementation of the traditional UNIX macro processor.
+      M4 is useful for writing text files that can be logically parsed and
+      is used by many programs as part of their build process. M4 has
+      built-in functions for including files, running shell commands, doing
+      arithmetic, etc. The autoconf program needs m4 for generating
+      configure scripts, but not for running configure scripts.
+
+config PKG_MADPLAY
+    depends CAP_HAS_MMU
+    select PKG_LIBMAD
+    bool "madplay"
+    help
+      A command-line MPEG audio decoder and player based on the MAD
+      library (libmad). For details about MAD, see the libmad package.
+
+config PKG_MAKE
+    depends CAP_HAS_MMU
+    bool "make"
+    help
+      A GNU tool for controlling the generation of executables and other
+      non-source files of a program from the program's source files. Make
+      allows users to build and install packages without any significant
+      knowledge about the details of the build process. The details about
+      how the program should be built are provided for make in the program's
+      makefile.
+
+      The GNU make tool should be installed on your system because it is
+      commonly used to simplify the process of installing programs.
+
+config PKG_MAN
+    depends CAP_HAS_MMU
+    select PKG_GROFF
+    bool "man"
+    help
+      The man package includes three tools for finding information and/or
+      documentation about your Linux system: man, apropos, and whatis. The
+      man system formats and displays on-line manual pages about commands or
+      functions on your system. Apropos searches the whatis database
+      (containing short descriptions of system commands) for a string.
+      Whatis searches its own database for a complete word.
+
+      The man package should be installed on your system because it is the
+      primary way to find documentation on a Linux system.
+
+menu "Matchbox window manager packages"
+choice
+    prompt "Matchbox"
+    default CHOICE_MATCHBOX_NONE
+    help
+      Matchbox is a X11 Window manager for GNOME Mobile
+    config CHOICE_MATCHBOX_NONE
+        bool "Do not install"
+    config CHOICE_MATCHBOX
+        bool "Install"
+endchoice
+
+    config PKG_MATCHBOX
+        depends CHOICE_MATCHBOX
+        select PKG_LIBMATCHBOX
+        select PKG_MATCHBOX_COMMON
+        select PKG_MATCHBOX_WM
+        select PKG_LIBXEXT
+        select PKG_LIBXFT
+        select PKG_LIBX11
+        select PKG_LIBPNG
+        bool "matchbox"
+        default y
+        help
+          The Matchbox window manager.
+
+    config PKG_LIBMATCHBOX
+        depends PKG_MATCHBOX
+        bool
+
+    config PKG_MATCHBOX_COMMON
+        depends PKG_MATCHBOX
+        bool
+
+    config PKG_MATCHBOX_WM
+        depends PKG_MATCHBOX
+        select PKG_LIBERATION_FONTS
+        bool
+
+    config PKG_MATCHBOX_DESKTOP
+        depends PKG_MATCHBOX
+        bool "Matchbox Desktop"
+
+    config PKG_MATCHBOX_PANEL
+        depends PKG_MATCHBOX
+        bool "Matchbox Panel"
+
+endmenu   
+
+config PKG_MDADM
+    depends CAP_HAS_MMU
+    bool "mdadm"
+    help
+      mdadm is a tool for creating, managing and monitoring device arrays
+      using the "md" driver in Linux, also known as Software RAID arrays.
+
+config PKG_MERGE
+    depends GNUTARCH != buildarch
+    bool
+    default y
+    help
+      User provided files in merge/.
+
+config PKG_MICROWINDOWS
+    bool "microwindows"
+    help
+      Microwindows (also known as nano-x) is a very small frame buffer
+      based X server. Its aim is to bring the features of modern windowing
+      environments to smaller devices and platforms. Also included are
+      several utility and demo programs.
+
+config PKG_MIITOOL
+    bool "miitool"
+    help
+      view, manipulate media-independent interface status
+
+config PKG_MINICOM
+    depends CAP_HAS_MMU
+    select PKG_TERMCAP
+    bool "minicom"
+    help
+      Minicom is a communications program that resembles the MSDOS Telix
+      somewhat. It has a dialing directory, color, full ANSI and VT100
+      emulation, an (external) scripting language and more.
+
+      Run 'minicom -s' as root to create a system wide configuration.
+      Users need read/write permissions on the serial port devices in
+      order to use minicom.
+
+      It's recommended to install lrzsz if you want to transfer files
+      with minicom.
+
+config PKG_MKSPOOFLINKS
+    depends CAP_HAS_MMU
+    depends GNUTARCH = buildarch
+    bool
+    default y
+
+config PKG_MODEPS
+    depends GNUTARCH != buildarch
+    bool "module depencies"
+    default y
+    help
+      Build the module dependency file modules.dep
+
+choice
+    prompt "module loading"
+    default MODUTILS_NONE
+    help
+      The modutils package includes various programs needed for automatic
+      loading and unloading of modules under 2.2 and later kernels, as well
+      as other module management programs. Device drivers and filesystems
+      are two examples of loaded and unloaded modules.
+
+      Choose the module loading tools (insmod/depmod etc).  For
+      2.2/2.4 kernels, use modutils, for 2.6 use module-init-tools.
+      You may choose 'none' if you want to use the busybox versions
+
+    config PKG_MODUTILS
+        bool "modutils"
+    config PKG_MODULE_INIT_TOOLS
+        bool "module-init-tools"
+    config MODUTILS_NONE
+        bool "use busybox utilites"
+endchoice
+
+config PKG_MPLAYER
+     bool "mplayer"
+     help
+       This package contains a movie player MPlayer which runs on many 
+       systems.  It plays most MPEG/VOB,AVI, Ogg/OGM, VIVO, ASF/WMA/WMV, 
+       QT/MOV/MP4, RealMedia, Matroska, NUT, NuppelVideo, FLI,YUV4MPEG, 
+       FILM, RoQ, PVA files, supported by many native, XAnim, and Win32 
+       DLL codecs.
+
+config PKG_MP3PLAY
+    bool "mp3play"
+    help
+      Provides a small mp3 audio player.  mp3play is designed to be able to
+      play mp3 data files within the local filesystem or fetch files to play
+      via http over a network. For the http case the address can specify a
+      streaming MP3 server.
+
+config PKG_MTD_UTILS
+    select PKG_ZLIB if PLATFORM != host
+    select PKG_LZO  if PLATFORM != host
+    select PKG_E2FSPROGS if PLATFORM != host
+    bool "mtd-utils"
+    help
+      Provides jffs2 and ubifs utilities
+
+config PKG_MUX_SERVER
+    depends CAP_HAS_MMU
+    bool "mux server"
+    help
+      serial console (de)multiplexor program
+
+config PKG_MYSQL
+    depends CAP_HAS_MMU
+    select PKG_NCURSES
+    bool "mysql"
+    help
+      MySQL is a multi-user, multi-threaded SQL database server. MySQL is a
+      client/server implementation consisting of a server daemon (mysqld)
+      and many different client programs and libraries
+
+config PKG_NAUTILUS
+    bool "nautilus"
+    select PKG_EEL
+    select PKG_LIBRSVG
+    help
+      File manager and graphical shell for GNOME
+
+config PKG_NCURSES
+    select PKG_LIBTERMCAP
+    bool "ncurses"
+    help
+      The curses library routines are a terminal-independent method of
+      updating character screens with reasonable optimization. The ncurses
+      (new curses) library is a freely distributable replacement for the
+      discontinued 4.4BSD classic curses library.
+
+config PKG_NCURSES_WANT_REDUCED_SET
+    depends CAP_HAS_MMU
+    depends PKG_NCURSES
+    bool "Install only a subset of terminal types"
+    default y
+    help
+       This installs only a small set of essential terminal emulations
+       which saves > 5MB of space.  For most embedded system select this
+       option.
+
+config PKG_NET_SNMP
+    depends CAP_HAS_MMU
+    bool "net-snmp"
+    help
+      Simple Network Management Protocol suite for monitoring routers.
+
+config PKG_NET_TOOLS
+    depends CAP_HAS_MMU
+    bool "net-tools"
+    help
+      The net-tools package contains basic networking tools, including
+      ifconfig, netstat, route, and others.
+
+config PKG_NETCAT
+    depends CAP_HAS_MMU
+    bool "netcat (nc)"
+    help
+      Reads and writes data across network connections using TCP or UDP
+
+config PKG_NETPERF
+    bool "netperf"
+    help
+       Netperf is a benchmarking tool that can be used to measure the 
+       performance of many different types of networking. It provides 
+       tests for both unidirecitonal throughput, and end-to-end latency. 
+       The environments currently measureable by netperf include:
+
+       * TCP and UDP via BSD Sockets
+       * DLPI
+       * Unix Domain Sockets
+       * Fore ATM API
+       * HP HiPPI Link Level Access
+
+       This package also builds host components installed in 
+          <ltib>/bin/netserver
+          <ltib>/bin/netperf
+
+config PKG_NFS_UTILS
+    depends CAP_HAS_MMU
+    select PKG_PORTMAP
+    bool "nfs-utils"
+    help
+       Linux NFS utility package needed to provide an NFS server.  This
+       workins in conjunction with the kernel NFS daemon which must
+       be enabled
+
+config PKG_NSS_MDNS
+    depends CAP_HAS_MMU
+    bool "nss-mdns"
+    help
+       nss-mdns is a plugin for the GNU Name Service Switch (NSS)
+       functionality of the GNU C Library (glibc) providing host name
+       resolution via Multicast DNS (aka Zeroconf, aka Apple Rendezvous,
+       aka Apple Bonjour), effectively allowing name resolution by common
+       Unix/Linux programs in the ad-hoc mDNS domain .local.
+
+config PKG_NTPCLIENT
+    bool "ntpclient"
+    help
+       This is used to set the system time.  Later versions of busybox
+       include this.
+
+config PKG_OPENOBEX
+    depends CAP_HAS_MMU
+    bool "openobex"
+    help
+      Openobex : Object Exchange (OBEX) protocol.
+
+config PKG_OPENCV
+    depends CAP_HAS_MMU
+    select PKG_GTK2
+    select PKG_GST_PLUGINS_BASE
+    select PKG_GST_PLUGINS_GOOD
+    select PKG_GSTREAMER_CORE
+    bool "opencv"
+    help
+      The Open Computer Vision Library.
+
+config PKG_OPENSSH
+    depends CAP_HAS_MMU
+    select PKG_OPENSSL
+    select PKG_ZLIB
+    bool "openssh"
+    help
+      This is the full blown openssh package.  Normally dropbear is sufficient
+      and smaller.
+
+config PKG_OPENSSH_WANT_HACKABLE_KEYS
+    depends CAP_HAS_MMU
+    depends PKG_OPENSSH
+     bool "use insecure hackable prebuilt keys"
+     help
+        This option provides a canned, static, hackable openssh keys.
+        This should only be used during development to avoid having
+        to keep editing your own known hosts keys file.  Please disable
+        this for any systems that need any level of security.
+
+config PKG_OPENSSL
+    depends CAP_HAS_MMU
+    bool "openssl"
+    help
+      The OpenSSL toolkit provides support for secure communications between
+      machines. OpenSSL includes a certificate management tool and shared
+      libraries which provide various cryptographic algorithms and
+      protocols.
+
+config PKG_OPENSSL_WANT_SEC
+    depends CAP_HAS_MMU
+    depends PKG_OPENSSL
+    bool "Request the use hardware acceleration (needs driver support)"
+    help
+      You can use this to request crypto operations on the crypto
+      hardware accelerator (SEC) if available.  Selecting
+      this option does not require you to specify an engine to openssl;
+      the SEC's availability will be checked and used by default.
+
+      This requires the SEC driver be configured in the kernel.
+
+      THIS IS ONLY A REQUEST, IT MAY NOT BE AVAILABLE ON YOUR TARGET
+
+config PKG_OPROFILE
+    depends CAP_HAS_MMU
+    select PKG_BASH
+    select PKG_BINUTILS
+    select PKG_POPT
+    bool "oprofile"
+    help
+      OProfile is a profiling system for Linux.  Profiling runs
+      transparently in the background, and profile data can be collected
+      at any time. OProfile makes use of hardware performance counters
+      provided by many processors, and can use the RTC for profiling on
+      other processor types.
+
+config PKG_ORBIT2
+    depends CAP_HAS_MMU
+    select PKG_LIBIDL
+    bool "ORBit2"
+
+config PKG_PANGO
+    depends CAP_HAS_MMU
+    select PKG_FONTCONFIG
+    select PKG_GLIB2
+    select PKG_CAIRO
+    bool "pango"
+    help
+       System for layout and rendering of internationalized text
+
+config PKG_PATCH
+    depends CAP_HAS_MMU
+    bool "patch"
+    help
+      The patch program applies diff files to originals. The diff command is
+      used to compare an original to a changed file. Diff lists the changes
+      made to the file. A person who has the original file can then use the
+      patch command with the diff file to add the changes to their original
+      file (patching the file).
+
+      Patch should be installed because it is a common way of upgrading
+      applications.
+
+
+config PKG_PCIUTILS
+    depends CAP_HAS_MMU
+    bool "pciutils"
+    help
+      The pciutils package contains various utilities for inspecting and
+      setting devices connected to the PCI bus. The utilities provided
+      require kernel version 2.1.82 or newer (which support the
+      /proc/bus/pci interface).
+
+config PKG_PCMCIAUTILS
+    depends CAP_HAS_MMU
+    select PKG_SYSFSUTILS
+    select PKG_UDEV
+    bool "pcmciautils"
+    help
+      This package contains the user space utilies for PCMCIA device
+      management, suitable for use in kernels newer than 2.6.13.
+      See http://kernel.org/pub/linux/utils/kernel/pcmcia/pcmcia.html
+
+config PKG_PCRE
+    depends CAP_HAS_MMU
+    bool "pcre"
+    help
+      The PCRE library is a set of functions that implement regular
+      expression pattern matching using the same syntax and semantics
+      as Perl 5. PCRE has its own native API, as well as a set of wrapper
+      functions that correspond to the POSIX regular expression API.
+
+config PKG_PERL
+    depends CAP_HAS_MMU
+    bool "perl"
+    help
+      Perl is a high-level programming language with roots in C, sed, awk
+      and shell scripting.  Perl is good at handling processes and files,
+      and is especially good at handling text.  Perl's hallmarks are
+      practicality and efficiency.  While it is used to do a lot of
+      different things, Perl's most common applications are system
+      administration utilities and web programming.  A large proportion of
+      the CGI scripts on the web are written in Perl.  You need the perl
+      package installed on your system so that your system can handle Perl
+      scripts.
+
+      Install this package if you want to program in Perl or enable your
+      system to handle Perl scripts.
+
+config PKG_PHP
+    depends CAP_HAS_MMU
+    select PKG_LIBXML2
+    select PKG_HTTPD
+    select PKG_MYSQL
+    select PKG_ZLIB
+    bool "php"
+    help
+      PHP is an HTML-embedded scripting language. PHP attempts to make it
+      easy for developers to write dynamically generated webpages. PHP also
+      offers built-in database integration for several commercial and
+      non-commercial database management systems, so writing a
+      database-enabled webpage with PHP is fairly simple
+
+
+config PKG_PIDENTD
+    depends CAP_HAS_MMU
+    bool "pidentd"
+    help
+      The identd server imiplements the TCP/IP IDENT user identification
+      protocol as specified in the RFC 1413 document.  If you make a
+      connection to a service on another machine, that server can
+      retrieve your user name by contacting the identd daemon running
+      on your machine.
+
+config PKG_PKGCONFIG
+    depends CAP_HAS_MMU
+    bool "pkgconfig"
+    help
+      The pkgconfig tool determines compilation options. For each required
+      library, it reads the configuration file and outputs the necessary
+      compiler and linker flags.
+
+config PKG_PLAY
+    bool "play"
+    help
+      Provides a small wav audio player and audio tone test generator.
+
+config PKG_PLC_UTILS
+    bool "plc-utils"
+    help
+      Provides the Qualcomm Atheros Powerline Toolkit.
+
+
+config PKG_POPPLER
+    select PKG_FONTCONFIG
+    select PKG_GLIB2
+    bool "poppler"
+    help
+          Poppler ia a PDF render library.
+
+config PKG_POPT
+    depends CAP_HAS_MMU
+    bool "popt"
+    help
+      Popt is a C library for parsing command line parameters. Popt was
+      heavily influenced by the getopt() and getopt_long() functions, but it
+      improves on them by allowing more powerful argument expansion. Popt
+      can parse arbitrary argv[] style arrays and automatically set
+      variables based on command line arguments. Popt allows command line
+      arguments to be aliased via configuration files and includes utility
+      functions for parsing arbitrary strings into argv[] arrays using
+      shell-like rules.
+
+
+config PKG_PORTMAP
+    depends CAP_HAS_MMU
+    select PKG_TCP_WRAPPERS
+    bool "portmap"
+    help
+      The portmapper program is a security tool that prevents theft of NIS
+      (YP), NFS, and other sensitive information via the portmapper. A
+      portmapper manages RPC connections, which are used by protocols like
+      NFS and NIS.
+
+      The portmap package should be installed on any machine which acts as a
+      server for protocols using RPC.
+
+config PKG_PPP
+    depends CAP_HAS_MMU
+    bool "ppp"
+    help
+      The ppp package contains the PPP (Point-to-Point Protocol) daemon and
+      documentation for PPP support. The PPP protocol provides a method for
+      transmitting datagrams over serial point-to-point links. PPP is
+      usually used to dial in to an ISP (Internet Service Provider) or other
+      organization over a modem and phone line.
+
+config PKG_PPP_WANT_FILTER
+    depends CAP_HAS_MMU
+    select PKG_LIBPCAP
+    depends PKG_PPP
+    bool "Install support for PPP packet filtering (needs driver support)"
+    default n
+    help
+       This includes support for PPP packet filtering.
+       Requires libpcap (automatically selected) to build,
+       and kernel driver support is required to run.
+
+config PKG_PROCINFO
+    depends CAP_HAS_MMU
+    select PKG_NCURSES
+    bool "procinfo"
+    help
+      The procinfo command gets system data from the /proc directory
+      (the kernel filesystem), formats it and displays it on standard
+      output. You can use procinfo to acquire information about your
+      system from the kernel as it is running. Install procinfo if
+      you'd like to use it to gather and display system data.
+
+config PKG_PROCPS
+    depends CAP_HAS_MMU
+    select PKG_NCURSES
+    bool "procps"
+    help
+      The procps package contains a set of system utilities that provide
+      system information. Procps includes ps, free, skill, snice, tload,
+      top, uptime, vmstat, w, and watch. The ps command displays a snapshot
+      of running processes. The top command provides a repetitive update of
+      the statuses of running processes. The free command displays the
+      amounts of free and used memory on your system. The skill command
+      sends a terminate command (or another specified signal) to a specified
+      set of processes. The snice command is used to change the scheduling
+      priority of specified processes. The tload command prints a graph of
+      the current system load average to a specified tty. The uptime command
+      displays the current time, how long the system has been running, how
+      many users are logged on, and system load averages for the past one,
+      five, and fifteen minutes. The w command displays a list of the users
+      who are currently logged on and what they are running. The watch
+      program watches a running program. The vmstat command displays virtual
+      memory statistics about processes, memory, paging, block I/O, traps,
+      and CPU activity.
+
+config PKG_PSMISC
+    depends CAP_HAS_MMU
+    select PKG_NCURSES
+    bool "psmisc"
+    help
+      The psmisc package contains utilities for managing processes on your
+      system: pstree, killall, and fuser. The pstree command displays a tree
+      structure of all of the running processes on your system. The killall
+      command sends a specified signal (SIGTERM if nothing is specified) to
+      processes identified by name. The fuser command identifies the PIDs of
+      processes that are using specified files or filesystems.
+
+config PKG_PYTHON
+    depends CAP_HAS_MMU
+    depends TOOLCHAIN_TYPE != 64
+    bool "Python"
+    help
+       Python is an interpreted, interactive, object-oriented programming lan-
+       guage  that  combines  remarkable power with very clear syntax.  For an
+       introduction to programming in Python you are referred  to  the  Python
+       Tutorial.  The Python Library Reference documents built-in and standard
+       types, constants, functions and modules.  Finally, the Python Reference
+       Manual describes the syntax and semantics of the core language in (per-
+       haps too) much detail.
+
+menu "Qt"
+choice
+    prompt "Qt"
+    default QT_NONE
+    help
+      Qt Package
+
+    config QT_NONE
+        bool "Do not install Qt"
+    config PKG_QT_EMBEDDED
+        depends CAP_HAS_MMU
+        select PKG_TSLIB
+        select PKG_ZLIB
+        select PKG_FONTCONFIG
+        select PKG_GLIB2
+        select PKG_ZLIB
+        bool "Qt Embedded"
+        help
+           Qt will be installed as Embedded.
+    config PKG_QT_X11
+        depends CAP_HAS_MMU
+        select PKG_XORG_SERVER
+        select PKG_XORG_X11_PROTO_DEVEL
+        select PKG_RANDRPROTO
+        select PKG_RENDERPROTO
+        select PKG_FIXESPROTO
+        select PKG_DAMAGEPROTO
+        select PKG_XF86DRIPROTO
+        select PKG_XCMISCPROTO
+        select PKG_XEXTPROTO
+        select PKG_XPROTO
+        select PKG_SCRNSAVERPROTO
+        select PKG_BIGREQSPROTO
+        select PKG_RESOURCEPROTO
+        select PKG_FONTSPROTO
+        select PKG_INPUTPROTO
+        select PKG_KBPROTO
+        select PKG_VIDEOPROTO
+        select PKG_COMPOSITEPROTO
+        select PKG_RECORDPROTO
+        select PKG_FONTCACHEPROTO
+        select PKG_XF86BIGFONTPROTO
+        select PKG_XCB_PROTO
+        select PKG_LIBPTHREAD_STUBS
+        select PKG_LIBFONTENC
+        select PKG_XTRANS
+        select PKG_LIBDRM
+        select PKG_PIXMAN
+        select PKG_LIBXCB
+        select PKG_LIBXKBFILE
+        select PKG_LIBXFONT
+        select PKG_LIBXDMCP
+        select PKG_LIBXAU
+        select PKG_LIBX11
+        select PKG_LIBXEXT
+        select PKG_LIBXRENDER
+        select PKG_LIBXFIXES
+        select PKG_LIBXDAMAGE
+        select PKG_LIBPCIACCESS
+        select PKG_FONTUTIL
+        select PKG_TSLIB
+        select PKG_OPENSSL
+        select PKG_LIBXRANDR
+        select PKG_LIBSM
+        select PKG_LIBICE
+        select PKG_FONTCONFIG
+        select PKG_GLIB2
+        select PKG_ZLIB
+        bool "Qt using X11"
+        help
+           Qt Graphics will be diplayed under X11.
+endchoice
+
+config PKG_QT_PHONON
+    depends CAP_HAS_MMU
+    depends PKG_QT_EMBEDDED || PKG_QT_X11
+    select PKG_GST_PLUGINS_BASE
+    select PKG_GSTREAMER_CORE
+    bool "Phonon"
+    default n
+    help
+       Enable Phonon library.
+endmenu
+
+menu "Qtopia"
+choice
+    prompt "Qtopia version"
+    default QTOPIA_NONE
+    help
+      Qtopia
+
+    config QTOPIA_NONE
+        bool "Do not install Qtopia"
+    config PKG_QTOPIA
+        depends CAP_HAS_MMU
+        select PKG_LIBJPEG
+        select PKG_E2FSPROGS
+        select PKG_TIMEZONE
+        bool "Qtopia 2"
+        help
+           The qtopia palmtop environment version 2.2.0.  Self contained so it
+           does not need seperate qtembedded or tmake.
+           Currently this is only supported on mpc5200 based platforms.
+    config PKG_QTOPIA_4
+        depends CAP_HAS_MMU
+        select PKG_LIBJPEG
+        select PKG_E2FSPROGS
+        select PKG_TIMEZONE
+        bool "Qtopia 4"
+        help
+           Qtopia version 4
+endchoice
+
+config PKG_QTOPIA_WANT_MOUSE
+    depends CAP_HAS_MMU
+    depends PKG_QTOPIA || PKG_QTOPIA_4
+    bool "Use usb mouse instead of touchscreen in qtopia by default"
+    default n
+    help
+       Select y here if you want Qtopia to use USB mouse by default.
+    
+config PKG_QTOPIA_WANT_TSLIB
+    depends CAP_HAS_MMU
+    depends PKG_QTOPIA || PKG_QTOPIA_4
+    select PKG_TSLIB
+    bool "Use touchscreen"
+    help
+       Select y if you want Qtopia to use tslib.
+
+choice
+    depends PKG_QTOPIA_4
+    prompt "Media player engine"
+    default PKG_QTOPIA_WANT_MEDIA_GSTREAMER
+    help
+      Choose the media engine which the Qtopia audio/video player will use.
+
+    config PKG_QTOPIA_WANT_MEDIA_NONE
+        bool "No media engine"
+    config PKG_QTOPIA_WANT_MEDIA_GSTREAMER
+        select PKG_GSTREAMER_CORE
+        bool "GStreamer media engine"
+        help
+          Qtopia will use the GStreamer plugin framework for its media player.
+endchoice
+
+choice
+    depends PKG_QTOPIA_4
+    prompt "Sound system"
+    default PKG_QTOPIA_WANT_SOUND_ALSA
+    help
+      System which Qtopia uses to play sounds
+    config PKG_QTOPIA_WANT_SOUND_OSS
+        bool "Use OSS sound system"
+        help
+           Select if you want Qtopia to use OSS.
+    config PKG_QTOPIA_WANT_SOUND_ALSA
+        bool "Use ALSA sound system"
+        help
+           Select if you want Qtopia to use ALSA.
+endchoice
+
+config PKG_QTOPIA_WANT_IRDA
+    depends PKG_QTOPIA_4
+    bool "Enable IrDA beaming"
+    default n
+    help
+       Select y here to enable IrDA beaming.
+
+config PKG_QTOPIA_WANT_HOST_GUI_TOOLS
+    depends PKG_QTOPIA_4
+    bool "Enable host GUI tools"
+    default n
+    help
+       Some host tools are not used when building Qtopia within ltib.
+       Not building these tools saves time when building.  Select y here
+       to enable designer, linguist, and assistant GUI tools.
+
+menu "Applications"
+config PKG_QTOPIA_WANT_APP_CALCULATOR
+    depends PKG_QTOPIA_4
+    bool "Calculator"
+    default n
+    help
+       Select y here to include the calculator application.
+
+config PKG_QTOPIA_WANT_APP_CALENDAR
+    depends PKG_QTOPIA_4
+    bool "Calendar"
+    default n
+    help
+       Select y here to include the calendar application.
+
+config PKG_QTOPIA_WANT_APP_CAMERA
+    depends PKG_QTOPIA_4
+    bool "Camera"
+    default n
+    help
+       Select y here to include the camera application.
+
+config PKG_QTOPIA_WANT_APP_CLOCK
+    depends PKG_QTOPIA_4
+    bool "Clock"
+    default y
+    help
+       Select y here to include the clock application.
+
+config PKG_QTOPIA_WANT_APP_CONTACTS
+    depends PKG_QTOPIA_4
+    bool "Contacts"
+    default n
+    help
+       Select y here to include the contacts/addressbook application.
+
+config PKG_QTOPIA_WANT_APP_GAMES
+    depends PKG_QTOPIA_4
+    bool "Games"
+    default n
+    help
+       Select y here to include the games applications.
+
+config PKG_QTOPIA_WANT_APP_HELP
+    depends PKG_QTOPIA_4
+    bool "Help browser"
+    default n
+    help
+       Select y here to include the help browser applications.
+
+config PKG_QTOPIA_WANT_APP_MAIL
+    depends PKG_QTOPIA_4
+    bool "Mail"
+    default n
+    help
+       Select y here to include the mail application.
+
+config PKG_QTOPIA_WANT_APP_MEDIAPLAYER
+    depends PKG_QTOPIA_4
+    bool "Media player"
+    default y
+    help
+       Select y here to include the sound/video media player application.
+
+config PKG_QTOPIA_WANT_APP_MEDIARECORDER
+    depends PKG_QTOPIA_4
+    bool "Media recorder"
+    default y
+    help
+       Select y here to include the media recorder/voice notes application.
+
+config PKG_QTOPIA_WANT_APP_NOTES
+    depends PKG_QTOPIA_4
+    bool "Notes"
+    default n
+    help
+       Select y here to include the notes/textedit application.
+
+config PKG_QTOPIA_WANT_APP_PACKAGEMANAGER
+    depends PKG_QTOPIA_4
+    bool "Package manager"
+    default n
+    help
+       Select y here to include the package manager application.
+
+config PKG_QTOPIA_WANT_APP_PHOTOEDIT
+    depends PKG_QTOPIA_4
+    bool "Photo edit"
+    default n
+    help
+       Select y here to include the photo editor application.
+
+config PKG_QTOPIA_WANT_APP_SYNC
+    depends PKG_QTOPIA_4
+    bool "Synchronization"
+    default n
+    help
+       Select y here to include the desktop synchronization application.
+
+config PKG_QTOPIA_WANT_APP_TODO
+    depends PKG_QTOPIA_4
+    bool "Todo"
+    default n
+    help
+       Select y here to include the todo list/tasks application.
+
+config PKG_QTOPIA_WANT_APP_WORLDTIME
+    depends PKG_QTOPIA_4
+    bool "World time"
+    default n
+    help
+       Select y here to include the world time application.
+endmenu
+
+menu "Settings applications"
+config PKG_QTOPIA_WANT_SETTINGS_APPEARANCE
+    depends PKG_QTOPIA_4
+    bool "Appearance"
+    default n
+    help
+       Select y here to include the appearance settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_CALIBRATE
+    depends PKG_QTOPIA_4
+    bool "Calibrate touchscreen"
+    default n
+    help
+       Select y here to include the touchscreen calibration settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_DATETIME
+    depends PKG_QTOPIA_4
+    bool "Date/time"
+    default n
+    help
+       Select y here to include the date/time (systemtime) settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_HANDWRITING
+    depends PKG_QTOPIA_4
+    bool "Handwriting"
+    default n
+    help
+       Select y here to include the handwriting settings application and the handwriting recognition library.
+
+config PKG_QTOPIA_WANT_SETTINGS_HOMESCREEN
+    depends PKG_QTOPIA_4
+    bool "Homescreen"
+    default n
+    help
+       Select y here to include the homescreen settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_LANGUAGE
+    depends PKG_QTOPIA_4
+    bool "Language"
+    default n
+    help
+       Select y here to include the language settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_LOGGING
+    depends PKG_QTOPIA_4
+    bool "Logging"
+    default n
+    help
+       Select y here to include the system logging settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_NETWORK
+    depends PKG_QTOPIA_4
+    bool "Network"
+    default n
+    help
+       Select y here to include the Internet/network settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_POWER
+    depends PKG_QTOPIA_4
+    bool "Light and power"
+    default n
+    help
+       Select y here to include the power management settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_SECURITY
+    depends PKG_QTOPIA_4
+    bool "Security"
+    default n
+    help
+       Select y here to include the security settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_SERVERWIDGETS
+    depends PKG_QTOPIA_4
+    bool "Server widgets"
+    default n
+    help
+       Select y here to include the server widgets application for changing widget sets.
+
+config PKG_QTOPIA_WANT_SETTINGS_SPEEDDIAL
+    depends PKG_QTOPIA_4
+    bool "Speed dial"
+    default n
+    help
+       Select y here to include the speed dial settings application.
+
+config PKG_QTOPIA_WANT_SETTINGS_WORDS
+    depends PKG_QTOPIA_4
+    bool "Words"
+    default n
+    help
+       Select y here to include the words/text entry settings application.
+endmenu
+
+config PKG_QTOPIA_WANT_CACHE_HOST_TOOLS
+    depends CAP_HAS_MMU
+    depends PKG_QTOPIA
+    bool "Cache the host tools (Warning: read the help section!)"
+    default n
+    help
+       Enable to save the Qtopia host tools (moc, uic, etc.) in
+       ~/.qtopia_220_cache after the first full build.  This will save
+       build time later since the host tools will be reused, not rebuilt
+       from source.  Note that these tools will take about 76MB in $HOME.
+endmenu
+
+config PKG_READLINE
+    depends CAP_HAS_MMU
+    bool "readline"
+    help
+       Libraries to support command line editing functions
+
+config PKG_RPM
+    depends CAP_HAS_MMU
+    select PKG_ZLIB
+    bool "rpm"
+    help
+      The RPM Package Manager (RPM) is a powerful command line driven
+      package management system capable of installing, uninstalling,
+      verifying, querying, and updating software packages. Each software
+      package consists of an archive of files along with information about
+      the package like its version, a description, etc.
+
+config PKG_RNG_TOOLS
+    depends CAP_HAS_MMU
+    bool "rng-tools"
+    help
+       This daemon feeds data from a random number generator to the kernel's
+       random  number  entropy  pool,  after first checking the data to ensure
+       that it is properly random.
+
+config PKG_RSYNC
+    depends CAP_HAS_MMU
+    bool "rsync"
+    help
+      Rsync uses a reliable algorithm to bring remote and host files into
+      sync very quickly. Rsync is fast because it just sends the differences
+      in the files over the network instead of sending the complete
+      files. Rsync is often used as a very powerful mirroring process or
+      just as a more capable replacement for the rcp command. A technical
+      report which describes the rsync algorithm is included in this
+      package.
+
+config PKG_RT_TESTS
+    depends CAP_HAS_MMU
+    bool "rt-tests"
+    help
+      A set of programs that test and measure various components of
+      "realtime" kernel behavior, such as timer latency, signal latency and
+      the functioning of priority-inheritance mutexes.
+
+config PKG_RTCTEST
+    select PKG_KERNEL_LEAVESRC
+    bool "rtc-test"
+    help
+      A simple rtc test program extracted from the kernel
+      rtc documentation Documentation/rtc.txt.
+
+config PKG_SAMBA
+    bool "samba"
+    help
+      Samba is a suite that provides file and print services to all manor
+      of SMB/CIFS clients, including the numerous versions of Microsoft
+      Windows operating systems.
+
+config PKG_SASH
+    bool "sash"
+    help
+      Sash (Stand Alone SHell) is a same self contained shell used primarily
+      in the uClinux environment.  It also includes a few utilities (like
+      reboot and ps) that weren't part of the original sash.
+
+config PKG_SCHEDUTILS
+    depends CAP_HAS_MMU
+    bool "schedutils"
+    help
+      Utilities for manipulating process scheduler attributes.
+
+config PKG_SCREEN
+    depends CAP_HAS_MMU
+    select PKG_LIBELF
+    bool "screen"
+    help
+      The screen utility allows you to have multiple logins on just one
+      terminal. Screen is useful for users who telnet into a machine or are
+      connected via a dumb terminal, but want to use more than just one
+      login.
+
+config PKG_SED
+    depends CAP_HAS_MMU
+    bool "sed"
+    help
+      Sed (Stream EDitor) is a stream or batch (non-interactive) editor.
+      Sed takes text as input, performs an operation or set of operations on
+      the text, and outputs the modified text. The operations that sed
+      performs (substitutions, deletions, insertions, etc.) can be specified
+      in a script file or from the command line.
+
+config PKG_SEQ
+    depends CAP_HAS_MMU
+    bool "seq (from coreutils)"
+    help
+       This builds only the full seq utility from coreutils, which prints a
+       sequence of numbers
+
+config PKG_SETSERIAL
+    depends CAP_HAS_MMU
+    bool "setserial"
+    help
+      A utility for configuring serial ports.
+
+config PKG_SIMICSFS_MOD
+    depends CAP_HAS_MMU
+    select PKG_KERNEL_LEAVESRC
+    bool "simicsfs portal module"
+    help
+        driver to access host filesystem from inside linux running in simics
+
+config PKG_SKELL
+    bool "Skeleton base files"
+    default y
+    help
+        These are the base files and directories, say yes
+
+config PKG_SKELL_WANT_TERMINFO
+    depends CAP_HAS_MMU
+    depends PKG_SKELL
+    bool "Include terminfo"
+
+config PKG_SPARSE
+    depends CAP_HAS_MMU
+    bool "sparse"
+    select PKG_LIBXML2 if PLATFORM != host
+    help
+    Sparse is a semantic parser of source files: it's neither a compiler
+    (although it could be used as a front-end for one) nor is it a
+    preprocessor (although it contains as a part of it a preprocessing
+    phase).
+
+    It is meant to be a small - and simple - library.  Scanty and meager,
+    and partly because of that easy to use.  It has one mission in life:
+    create a semantic parse tree for some arbitrary user for further
+    analysis.  It's not a tokenizer, nor is it some generic context-free
+    parser.  In fact, context (semantics) is what it's all about - figuring
+    out not just what the grouping of tokens are, but what the _types_ are
+    that the grouping implies.
+
+    Sparse is primarily used in the development and debugging of the Linux kernel.
+
+config PKG_STATSERIAL
+    bool "statserial"
+    help
+      Statserial displays a table of the signals on a standard 9-pin or 25-pin
+      serial port, and indicates the status of the handshaking lines. It can be
+      useful for debugging problems with serial ports or modems.
+
+config PKG_SQLITE
+    bool "sqlite"
+    help
+        SQLite is a software library that implements a self-contained, serverless,
+        zero-configuration, transactional SQL database engine.
+
+config PKG_STRACE
+    bool "strace"
+    help
+      The strace program intercepts and records the system calls called and
+      received by a running process. Strace can print a record of each
+      system call, its arguments, and its return value. Strace is useful for
+      diagnosing problems and debugging, as well as for instructional
+      purposes.
+
+config PKG_SYSCONFIG
+    depends GNUTARCH != buildarch
+    bool
+    default y
+    help
+      This package is used to capture the selections made in the sysconfig.lkc
+      menu.  This menu lets you set things such as hostname and ip address.
+      All values here get stored as SYSCFG entries in .config.  When
+      These all get exported by ltib and used by the package specfile
+      'sysconfig.spec', this then writes out a single file: /etc/rc.d/rc.conf,
+      which is used to control the target board's statup (it replaces
+      the default version which comes from skell).
+
+config PKG_SYSFSUTILS
+    depends CAP_HAS_MMU
+    bool "sysfsutils"
+    help
+      These are a set of utilites built upon sysfs, a new virtual filesystem
+      in Linux kernel versions 2.5+ that exposes a system's device tree.
+      This version of sysfsutils includes the libsysfs library and the
+      systool utility. See http://linux-diag.sourceforge.net/Sysfsutils.html
+
+config PKG_SYSKLOGD
+    depends CAP_HAS_MMU
+    bool "sysklogd"
+    help
+      The sysklogd package contains two system utilities (syslogd and klogd)
+      that provide support for system logging. Syslogd and klogd run as
+      daemons and log system messages to different places, like sendmail
+      logs, security logs, and error logs.
+
+config PKG_SYSSTAT
+    depends CAP_HAS_MMU
+    bool "sysstat"
+    help
+      The sysstat package contains the sar, mpstat, iostat sadf and sa tools for Linux.
+
+      The sar command collects and reports system activity information. The iostat
+      command reports CPU utilization and I/O statistics for disks. The mpstat command
+      reports global and per-processor statistics. The sadf command is used to display
+      data collected by sar in various formats.
+
+      The statistics reported by sar concern I/O transfer rates, paging activity,
+      process-related activities, interrupts, network activity, memory and swap space
+      utilization, CPU utilization, kernel activities and TTY statistics, among others. 
+
+config PKG_SYSVINIT
+    depends CAP_HAS_MMU
+    bool "sysvinit"
+    help
+      The SysVinit package contains a group of processes that control
+      the very basic functions of your system. SysVinit includes the init
+      program, the first program started by the Linux kernel when the
+      system boots. Init then controls the startup, running and shutdown
+      of all other programs.
+
+config PKG_TAR
+    depends CAP_HAS_MMU
+    bool "tar"
+    help
+      The GNU tar program saves many files together in one archive and can
+      restore individual files (or all of the files) from that archive. Tar
+      can also be used to add supplemental files to an archive and to update
+      or list files in the archive. Tar includes multivolume support,
+      automatic archive compression/decompression, the ability to perform
+      remote archives, and the ability to perform incremental and full
+      backups.
+
+      If you want to use tar for remote backups, you also need to install
+      the rmt package.
+
+config PKG_TCLAP
+    depends CAP_HAS_MMU
+    bool "tclap"
+    help
+      TCLAP is a small, flexible library that provides a simple interface
+      for defining and accessing command line arguments. 
+
+config PKG_TCPDUMP
+    depends CAP_HAS_MMU
+    select PKG_LIBPCAP
+    bool "tcpdump"
+    help
+      Network packet capture/analyser tool
+
+      Tcpdump is a command-line tool for monitoring network traffic.
+      Tcpdump can capture and display the packet headers on a particular
+      network interface or on all interfaces. Tcpdump can display all of the
+      packet headers, or just the ones that match particular criteria.
+
+
+config PKG_TCP_WRAPPERS
+    depends CAP_HAS_MMU
+    bool "tcp_wrappers"
+    help
+      The tcp_wrappers package provides small daemon programs that can
+      monitor and filter incoming requests for systat, finger, FTP, telnet,
+      rlogin, rsh, exec, tftp, talk, and other network services.
+
+      Install the tcp_wrappers program if you need a security tool for
+      filtering incoming network services requests.
+
+config PKG_TERMCAP
+    depends CAP_HAS_MMU
+    select PKG_LIBTERMCAP
+    bool "termcap"
+    help
+      This package provides /etc/termcap needed by programs like minicom.
+      this version is a cut back mini termcap package which should
+      be sufficent for most people
+
+config PKG_TEXINFO
+    depends CAP_HAS_MMU
+    select PKG_NCURSES if PLATFORM != host
+    bool "texinfo"
+    help
+      Texinfo is a documentation system that can produce both online
+      information and printed output from a single source file. The GNU
+      Project uses the Texinfo file format for most of its documentation.
+
+      Install texinfo if you want a documentation system for producing both
+      online and print documentation from the same source file and/or if you
+      are going to write documentation for the GNU Project.
+
+config PKG_TIME
+    depends CAP_HAS_MMU
+    bool "time"
+    help
+      The GNU time utility runs another program, collects information about
+      the resources used by that program while it is running, and displays
+      the results.
+
+      utility for monitoring a programs use of system resources. This
+      is available in busybox
+
+config PKG_TIMEZONE
+    depends CAP_HAS_MMU
+    bool "timezone"
+    help
+      These are the famous "Olson Tables" with the offset to the
+      international standard time ("UTC") for any country in the world.
+      This package contains the data files and programs Linux needs to
+      handle timezones properly.  From ftp://elsie.nci.nih.gov/pub
+
+config PKG_TIMEZONE_WANT_TZCODE
+    depends CAP_HAS_MMU
+    depends PKG_TIMEZONE
+    bool "tzselect, zdump, zic"
+
+config PKG_TIMEZONE_WANT_LIBTZ
+    depends CAP_HAS_MMU
+    depends PKG_TIMEZONE
+    bool "libtz"
+
+config PKG_TINYLOGIN
+    depends CAP_HAS_MMU
+    bool "tinylogin"
+    help
+      TinyLogin is a suite of tiny Unix utilities for handling logging
+      into, being authenticated by, changing one's password for, and
+      otherwise maintaining users and groups on an embedded system.
+      It also provides shadow password support to enhance system security.
+      TinyLogin is, as the name implies, very small, and makes an
+      excellent complement to BusyBox on an embedded system (though it
+      can of course be used without).
+
+config PKG_TINYPROXY
+    depends CAP_HAS_MMU
+    bool "tinyproxy"
+    help
+      Tinyproxy is a GPLed, lightweight HTTP proxy. Designed from the
+      ground up to be fast and yet small, it is an ideal solution for
+      sites where a full featured HTTP proxy is required, but the system
+      resources for a larger proxy are unavailable.
+
+config PKG_TOTEM
+    depends CAP_HAS_MMU
+    bool "totem-media-player"
+    select PKG_TOTEM_PL_PARSER
+    select PKG_ISO_CODES
+    select PKG_GTK2
+    select PKG_GST_PLUGINS_BASE
+    select PKG_GSTREAMER_CORE
+    select PKG_GNOME_ICON_THEME
+    select PKG_LIBGNOMEUI
+    select PKG_LIBGNOME
+    help
+	Totem Media Player for GNOME
+
+config PKG_TOTEM_PL_PARSER
+    depends CAP_HAS_MMU
+    bool "totem-pl-parser"
+    select PKG_EVOLUTION_DATA_SERVER
+    select PKG_GTK2
+    select PKG_GLIB
+    select PKG_GCONF_DBUS
+    select PKG_LIBXML2
+    help
+	Playlist Parser for Totem Media Player
+
+config PKG_TSLIB
+    depends CAP_HAS_MMU
+    bool "tslib"
+    help
+      A library to abstract touchscreen events
+
+config PKG_TUNCTL
+    depends CAP_HAS_MMU
+    bool "tunctl"
+    help
+      Create and remove virtual network interfaces
+
+
+config PKG_USBUTILS
+    depends CAP_HAS_MMU
+    select PKG_LIBUSB
+    bool "usbutils"
+    help
+      This package contains utilities for inspecting devices connected to a
+      USB bus.
+
+config PKG_UCLINUX_CKSUM
+    depends CAP_HAS_MMU
+    bool "uclinux-cksum"
+    help
+      uCLinux cksum is a utility used by the uClilnux build tools in the
+      creation of the final image for some uCLinux architectures.
+      The utility is built from the source archive cksum-19990607.tar.gz
+      which is available from the uCLinux website, http://www.uclinux.org
+      The standard cksum utility available in most host distributions in
+      the coreutils package cannot be used as it has different command line
+      options, and some of these options are used by the uCLinux build
+      process.
+      The name of the final executable is changed to uc-cksum to prevent
+      confusion with the cksum available with the host distribution.
+
+config PKG_UTIL_LINUX
+    select PKG_E2FSPROGS 
+    select PKG_ZLIB
+    select PKG_PROCPS
+    depends CAP_HAS_MMU
+    bool "util-linux"
+    help
+      The util-linux package contains a large variety of low-level system
+      utilities that are necessary for a Linux system to function. Among
+      others, Util-linux contains the fdisk configuration tool and the login
+      program.
+
+
+config PKG_U_BOOT_TOOLS
+    depends CAP_HAS_MMU
+    bool "u-boot tools"
+    help
+        Build and install (on your target) the utilities that come with
+        u-boot (such as mkimage, img2srec, gen_eth_addr etc)
+
+config PKG_UNIFDEF
+    depends CAP_HAS_MMU
+    bool "unifdef"
+    help
+        Unifdef tool for removing ifdef'd lines from c/c++
+
+config PKG_UNZIP
+    depends CAP_HAS_MMU
+    bool "unzip"
+    help
+      UnZip will list, test, or extract files from a .zip archive,
+      commonly found on MS-DOS systems.
+
+config PKG_VALGRIND
+    depends CAP_HAS_MMU
+    depends GNUTARCH = 'powerpc'
+    bool "valgrind"
+    help
+        Valgrind is a suite of tools for debugging and profiling Linux
+        programs. With the tools that come with Valgrind, you can automatically
+        detect many memory management and threading bugs.
+
+config PKG_VIM
+    depends CAP_HAS_MMU
+    select PKG_NCURSES
+    bool "vim"
+    help
+      Vim is a highly configurable text editor built to enable efficient
+      text editing. It is an improved version of the vi editor distributed
+      with most UNIX systems.
+
+config PKG_VPLAY
+    bool "vplay"
+    help
+      This packages contains 3 executables for audio usage.  vplay, vrec, and
+      mixer.  They are simple programs used for recording, playing, and mixing
+      audio through the /dev/dsp device.  They are imported from the uClinux
+      distribution.
+
+config PKG_VSFTPD
+    depends CAP_HAS_MMU
+    bool "vsftpd"
+    help
+      vsftpd is a Very Secure FTP daemon. It was written completely from
+      scratch.
+
+      It is configured to not allow write access or non-anonymous user
+      login.
+
+config PKG_WATCHDOG
+    depends CAP_HAS_MMU
+    bool "watchdog"
+    help
+      Watchdog is a daemon that checks if your system is still working. If
+      programs in user space are not longer executed it will reboot the system.
+      However, this will not always work.
+
+config PKG_WGET
+    depends CAP_HAS_MMU
+    bool "wget"
+    help
+      GNU Wget is a file retrieval utility which can use either the HTTP or
+      FTP protocols. Wget features include the ability to work in the
+      background while you are logged out, recursive retrieval of
+      directories, file name wildcard matching, remote file timestamp
+      storage and comparison, use of Rest with FTP servers and Range with
+      HTTP servers to retrieve files over slow or unstable connections,
+      support for Proxy servers, and configurability.
+
+config PKG_WHICH
+    bool "which"
+    help
+      The which command shows the full pathname of a specified program, if
+      the specified program is in your PATH.
+
+config PKG_WIRELESS_TOOLS
+    depends CAP_HAS_MMU
+    bool "wireless-tools"
+    help
+      This package contain the Wireless tools used to manipulate the
+      Wireless Extension. The Wireless Extension is an interface allowing
+      you to set Wireless LAN specific parameters and get specific
+      statistics for wireless networking equipment.
+
+config PKG_XFSPROGS
+    bool "xfsprogs"
+    help
+      This package contains xfs utilities for the XFS filesystem
+
+menu X11
+choice
+    prompt "Install X11"
+    default X11_NONE
+    help
+      X11
+
+    config X11_NONE
+        bool "Do not install X11"
+    config PKG_XORG_SERVER
+        select PKG_XORG_X11_PROTO_DEVEL
+        select PKG_RANDRPROTO
+        select PKG_RENDERPROTO
+        select PKG_FIXESPROTO
+        select PKG_DAMAGEPROTO
+        select PKG_XF86DRIPROTO
+        select PKG_XCMISCPROTO
+        select PKG_XEXTPROTO
+        select PKG_XPROTO
+        select PKG_SCRNSAVERPROTO
+        select PKG_BIGREQSPROTO
+        select PKG_RESOURCEPROTO
+        select PKG_FONTSPROTO
+        select PKG_INPUTPROTO
+        select PKG_KBPROTO
+        select PKG_VIDEOPROTO
+        select PKG_COMPOSITEPROTO
+        select PKG_RECORDPROTO
+        select PKG_FONTCACHEPROTO
+        select PKG_XF86BIGFONTPROTO
+        select PKG_XCB_PROTO
+        select PKG_LIBPTHREAD_STUBS
+        select PKG_LIBFONTENC
+        select PKG_XTRANS
+        select PKG_LIBDRM
+        select PKG_PIXMAN
+        select PKG_LIBXCB
+        select PKG_LIBXKBFILE
+        select PKG_LIBXFONT
+        select PKG_LIBXDMCP
+        select PKG_LIBXAU
+        select PKG_LIBX11
+        select PKG_LIBXEXT
+        select PKG_LIBXRENDER
+        select PKG_LIBXFIXES
+        select PKG_LIBXDAMAGE
+	select PKG_LIBPCIACCESS
+	select PKG_FONTUTIL
+	select PKG_TSLIB
+	select PKG_OPENSSL
+	select PKG_LIBXRANDR
+        bool "X.Org 7.5"
+        help
+            X.Org server, with modular packages.
+endchoice
+
+config PKG_XORG_SERVER_WANT_XORG
+    depends PKG_XORG_SERVER
+    bool "build full modular X Server"
+    help
+      Build the full modular X server in addition to kdrive X server.
+
+menu "X11 libraries and packages"
+config PKG_RANDRPROTO
+    bool "randrproto"
+    help
+        Part of X.Org 7.5
+config PKG_RENDERPROTO
+    bool "renderproto"
+    help
+        Part of X.Org 7.5
+config PKG_FIXESPROTO
+    bool "fixesproto"
+    help
+        Part of X.Org 7.5
+config PKG_DAMAGEPROTO
+    bool "damageproto"
+    help
+        Part of X.Org 7.5
+config PKG_XF86DRIPROTO
+    bool "xf86driproto"
+    help
+        Part of X.Org 7.5
+config PKG_XCMISCPROTO
+    bool "xcmiscproto"
+    help
+        Part of X.Org 7.5
+config PKG_XEXTPROTO
+    bool "xextproto"
+    help
+        Part of X.Org 7.5
+config PKG_XPROTO
+    bool "xproto"
+    help
+        Part of X.Org 7.5
+config PKG_SCRNSAVERPROTO
+    bool "scrnsaverproto"
+    help
+        Part of X.Org 7.5
+config PKG_BIGREQSPROTO
+    bool "bigreqsproto"
+    help
+        Part of X.Org 7.5
+config PKG_RESOURCEPROTO
+    bool "resourceproto"
+    help
+        Part of X.Org 7.5
+config PKG_FONTSPROTO
+    bool "fontsproto"
+    help
+        Part of X.Org 7.5
+config PKG_INPUTPROTO
+    bool "inputproto"
+    help
+        Part of X.Org 7.5
+config PKG_KBPROTO
+    bool "kbproto"
+    help
+        Part of X.Org 7.5
+config PKG_VIDEOPROTO
+    bool "videoproto"
+    help
+        Part of X.Org 7.5
+config PKG_COMPOSITEPROTO
+    bool "compositeproto"
+    help
+        Part of X.Org 7.5
+config PKG_RECORDPROTO
+    bool "recordproto"
+    help
+        Part of X.Org 7.5
+config PKG_FONTCACHEPROTO
+    bool "fontcacheproto"
+    help
+        Part of X.Org 7.5
+config PKG_XF86BIGFONTPROTO
+    bool "xf86bigfontproto"
+    help
+        Part of X.Org 7.5
+config PKG_XCB_PROTO
+    bool "xcb-proto"
+    help
+        Part of X.Org 7.5
+config PKG_LIBPTHREAD_STUBS
+    bool "libpthread-stubs"
+    help
+        Part of X.Org 7.5
+config PKG_LIBFONTENC
+    bool "libfontenc"
+    select PKG_ZLIB
+    help
+        Part of X.Org 7.5
+config PKG_XTRANS
+    bool "xtrans"
+    help
+        Part of X.Org 7.5
+config PKG_LIBDRM
+    bool "libdrm"
+    help
+        Part of X.Org 7.5
+config PKG_PIXMAN
+    bool "pixman"
+    help
+        Part of X.Org 7.5
+config PKG_LIBXCB
+    bool "libxcb"
+    help
+        Part of X.Org 7.5
+config PKG_LIBXKBFILE
+    bool "libxkbfile"
+    help
+        Part of X.Org 7.5
+config PKG_LIBXFONT
+    bool "libXfont"
+    select PKG_FREETYPE
+    help
+        Part of X.Org 7.5
+config PKG_LIBXDMCP
+    bool "libXdmcp"
+    help
+        Part of X.Org 7.5
+config PKG_LIBXAU
+    bool "libXau"
+    help
+        Part of X.Org 7.5
+config PKG_LIBX11
+    bool "libX11"
+    help
+        Part of X.Org 7.5
+config PKG_LIBXEXT
+    bool "libXext"
+    help
+        Part of X.Org 7.5
+config PKG_LIBXFT
+    bool "libXft"
+    select PKG_FONTCONFIG
+    help
+        Part of X.Org 7.5
+
+config PKG_LIBXRANDR
+    bool "libXrandr"
+    help
+        Part of X.Org 7.5
+
+config PKG_LIBXRENDER
+    bool "libXrender"
+    help
+        Part of X.Org 7.5
+
+config PKG_LIBXFIXES
+    bool "libXfixes"
+    help
+        Part of X.Org 7.5
+
+config PKG_LIBXDAMAGE
+    bool "libXdamage"
+    help
+        Part of X.Org 7.5
+
+config PKG_LIBPCIACCESS
+    bool "libpciaccess"
+    help
+        Part of X.Org 7.5
+
+config PKG_FONTUTIL
+    bool "fontutil"
+    help
+        Part of X.Org 7.5
+
+config PKG_LIBICE
+    depends CAP_HAS_MMU
+    select PKG_XPROTO
+    select PKG_XTRANS
+    bool "libICE"
+    help
+      X.Org X11 libICE runtime library
+config PKG_LIBSM
+    depends CAP_HAS_MMU
+    select PKG_LIBICE
+    bool "libSM"
+    help
+      X.Org X11 libSM runtime library
+config PKG_LIBXPM
+    depends CAP_HAS_MMU
+    select PKG_XORG_SERVER
+    bool "libXpm"
+    help
+      X.Org X11 libXpm runtime library
+config PKG_LIBXT
+    depends CAP_HAS_MMU
+	select PKG_XORG_SERVER
+    select PKG_LIBSM
+    bool "libXt"
+    help
+      X.Org X11 libXt runtime library
+config PKG_LIBXMU
+    depends CAP_HAS_MMU
+	select PKG_XORG_SERVER
+    select PKG_LIBXT
+    select PKG_LIBICE
+    bool "libXmu"
+    help
+      X.Org X11 libXmu/libXmuu runtime libraries
+config PKG_LIBXAW
+    depends CAP_HAS_MMU
+	select PKG_XORG_SERVER
+    select PKG_LIBXMU
+    select PKG_LIBXPM
+    bool "libXaw"
+    help
+      X.Org X11 libXaw runtime library
+config PKG_LIBXXF86DGA
+    depends CAP_HAS_MMU
+    bool "libXxf86dga"
+    help
+      X.Org X11 libXxf86dga runtime library
+
+config PKG_XORG_X11_XKB_UTILS
+    depends CAP_HAS_MMU
+	select PKG_XORG_SERVER
+    bool "xkb-utils"
+    help
+      X.Org X11 xkb utilities
+
+config PKG_XORG_X11_PROTO_DEVEL
+    depends CAP_HAS_MMU
+    bool "xorg-x11-proto-devel"
+    help
+      X.Org X11 Protocol headers
+
+config PKG_XORG_X11_DRV_KEYBOARD
+    depends CAP_HAS_MMU
+    depends PKG_XORG_SERVER_WANT_XORG
+    bool "xorg-x11-drv-keyboard"
+    default y
+    help
+      Xorg X11 keyboard input driver
+
+config PKG_XORG_X11_DRV_MOUSE
+    depends CAP_HAS_MMU
+    depends PKG_XORG_SERVER_WANT_XORG
+    bool "xorg-x11-drv-mouse"
+    default y
+    help
+      Xorg X11 mouse input driver
+
+config PKG_XORG_X11_TWM
+    depends CAP_HAS_MMU
+	select PKG_XORG_SERVER
+    select PKG_LIBXMU
+    bool "twm"
+    help
+      X.Org X11 twm window manager
+
+config PKG_XTERM
+    depends CAP_HAS_MMU
+	select PKG_XORG_SERVER
+    select PKG_LIBXAW
+    bool "xterm"
+    help
+      Terminal emulator for the X Window System
+
+
+endmenu
+
+endmenu
+
+config PKG_YAFFS_UTILS
+    depends CAP_HAS_MMU
+    bool "yaffs_utils"
+    help
+      This package contains YAFFS file system utilities to create YAFFS
+      image and partition.
+
+config PKG_ZAPTEL
+    bool "zaptel"
+    select PKG_KERNEL_LEAVESRC
+    help
+      zaptel package conatins telephony drivers and utilities necessary for asterisk
+
+config PKG_ZAPTEL_PRECONFIG
+    depends PKG_ZAPTEL
+    string "zaptel preconfig filename"
+    default ""
+    help
+      Put in the name of the zaptel config file to use, this
+      must exist under the platform's configuration directory, for
+      instance: config/platform/mpc5200/zaptel.menuselect.makeopts
+      Setting this to the empty string will make zaptel use it's
+      own internal default configuration.
+
+config PKG_ZAPTEL_WANT_CF
+    depends PKG_ZAPTEL
+    bool "Configure zaptel at build time"
+    help
+      Select this if you want to interactively configure zaptel during
+      the build.  A copy of the configured value will be put back
+      into the platforms configuration directory, with the suffix .dev
+
+config PKG_ZLIB
+    bool "zlib"
+    help
+      Zlib is a general-purpose, patent-free, lossless data compression
+      library which is used by many different programs.
+
+source ../../userspace/extra_packages.lkc
+
+endmenu
+

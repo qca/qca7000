@@ -1,0 +1,10 @@
+create_proc_read_entry
+memcpy
+pr_debug
+printk
+qca_read_bootstrap
+qca_readproc
+qcabootstrap_mod_exit
+qcabootstrap_mod_init
+remove_proc_entry
+snprintf
