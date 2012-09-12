@@ -2,6 +2,6 @@
 *.o
 .tmp_versions
 Module.symvers
-qcabootstrap.ko
-qcabootstrap.mod.c
+qcaspi.ko
+qcaspi.mod.c
 modules.order

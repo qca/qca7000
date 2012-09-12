@@ -60,7 +60,7 @@
  *   constants;
  *--------------------------------------------------------------------*/
 
-#define QCASPI_VERSION "0.1.8"
+#define QCASPI_VERSION "0.1.9"
 #define QCASPI_MODNAME "qcaspi"
 #define QCASPI_DEF_MAC_ADDRESS "\x00\xB0\x52\xFF\xFF\x02"
 
@@ -1132,4 +1132,4 @@ module_exit(qcaspi_mod_exit);
 
 MODULE_DESCRIPTION("Qualcomm Atheros SPI Driver");
 MODULE_AUTHOR("Qualcomm Atheros Communications");
-MODULE_LICENSE("GPL");
+MODULE_LICENSE("Dual BSD/GPL");
