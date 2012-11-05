@@ -23,7 +23,8 @@
  *   qca_uart.c
  *
  *   This module implements the Qualcomm Atheros UART protocol for
- *   kernel-based UART device;
+ *   kernel-based UART device; it is essentially an Ethernet-to-UART
+ *   serial converter;
  *				
  *--------------------------------------------------------------------*/
 
@@ -217,7 +218,6 @@ qcauart_netdev_close(struct net_device *dev)
 {
 	struct qcauart *qca = netdev_priv(dev);
 
-	/* can't transmit any more. */
 	netif_stop_queue(dev);
 
 	if (qca->tx_skb) {
@@ -248,12 +248,10 @@ qcauart_netdev_xmit(struct sk_buff *skb, struct net_device *dev)
 	uint8_t pad_len = 0;
 	int written;
 
-	/* need padding? */
 	if (skb->len < QCAFRM_ETHMINLEN) {
 		pad_len = QCAFRM_ETHMINLEN - skb->len;
 	}
 
-	/* not enough head, tail room, or a runt frame, must copy data */
 	if (skb_headroom(skb) < QCAFRM_HEADER_LEN || skb_tailroom(skb) < QCAFRM_FOOTER_LEN + pad_len) {
 		tskb = skb_copy_expand(skb, QCAFRM_HEADER_LEN, QCAFRM_FOOTER_LEN + pad_len, GFP_ATOMIC);
 		if (tskb == NULL) {
@@ -264,7 +262,6 @@ qcauart_netdev_xmit(struct sk_buff *skb, struct net_device *dev)
 		skb = tskb;
 	}
 
-	/* save original frame length + padding */
 	frame_len = skb->len + pad_len;
 
 	ptmp = skb_push(skb, QCAFRM_HEADER_LEN);
@@ -494,20 +491,17 @@ qcauart_mod_init(void)
 
 	printk(KERN_INFO "qcauart: version %s\n", QCAUART_VERSION);
 
-	/* Validate module parameters. */
 	if (0)
 	{
 		return -EINVAL;
 	}
 
-	/* Register line discipline */
 	status = tty_register_ldisc(N_QCA, &qca_ldisc);
 	if (status != 0) {
 		printk(KERN_ERR "qcauart: can't register line discipline (err = %d)\n", status);
 		return status;
 	}
 
-	/* Allocate the devices */
 	qcauart_devs = alloc_netdev(sizeof(struct qcauart), "qca%d", qcauart_netdev_setup);
 	if (!qcauart_devs) {
 		printk(KERN_ERR "qcauart: Unable to allocate memory for UART network device\n");
@@ -523,7 +517,6 @@ qcauart_mod_init(void)
 
 	netif_carrier_off(qca->dev);
 
-	/* Register network device */
 	if (register_netdev(qcauart_devs)) {
 		printk(KERN_ERR "qcauart: Unable to register network device %s\n", qcauart_devs->name);
 		free_netdev(qcauart_devs);
@@ -571,4 +564,6 @@ module_exit(qcauart_mod_exit);
 
 MODULE_DESCRIPTION("Qualcomm Atheros UART Driver");
 MODULE_AUTHOR("Qualcomm Atheros Communications");
-MODULE_LICENSE("ISC");
+MODULE_LICENSE("DUAL BSD/GPL");
+MODULE_VERSION(QCAUART_VERSION);
+

@@ -1,5 +1,6 @@
 /*====================================================================*
  *   
+ *
  *   Copyright (c) 2011, 2012, Qualcomm Atheros Communications Inc.
  *   
  *   Permission to use, copy, modify, and/or distribute this software 
@@ -23,7 +24,8 @@
  *   qca_spi.c
  *
  *   This module implements the Qualcomm Atheros SPI protocol for
- *   kernel-based SPI device;
+ *   kernel-based SPI device; it is essentially an Ethernet-to-SPI
+ *   serial converter;
  *				
  *--------------------------------------------------------------------*/
 
@@ -118,10 +120,13 @@ static struct net_device *qcaspi_devs;
 static volatile unsigned int intReq;
 static volatile unsigned int intSvc;
 
-/*
+/*====================================================================*
+ *
  * Disables all SPI interrupts and returns the old value of the
  * interrupt enable register.
- */
+ *
+ *--------------------------------------------------------------------*/
+
 uint32_t
 disable_spi_interrupts(struct qcaspi *qca)
 {
@@ -130,11 +135,14 @@ disable_spi_interrupts(struct qcaspi *qca)
 	return old_intr_enable;
 }
 
-/*
+/*====================================================================*
+ *
  * Enables only the SPI interrupts passed in the intr argument.
  * All others are disabled.
  * Returns the old value of the interrupt enable register.
- */
+ *
+ *--------------------------------------------------------------------*/
+
 uint32_t
 enable_spi_interrupts(struct qcaspi *qca, uint32_t intr_enable)
 {
@@ -143,13 +151,16 @@ enable_spi_interrupts(struct qcaspi *qca, uint32_t intr_enable)
 	return old_intr_enable;
 }
 
-/*
+/*====================================================================*
+ *
  * Transmits a write command and len bytes of data
  * from src buffer in a single burst.
  *
  * Returns 0 if not all data could be transmitted,
  * and len if all data was transmitted.
- */
+ *
+ *--------------------------------------------------------------------*/
+
 uint32_t
 qcaspi_write_burst(struct qcaspi *qca, uint8_t *src, uint32_t len)
 {
@@ -177,13 +188,16 @@ qcaspi_write_burst(struct qcaspi *qca, uint8_t *src, uint32_t len)
 	return len;
 }
 
-/*
+/*====================================================================*
+ *
  * Transmits len bytes of data from src buffer in
  * a single burst.
  *
  * Returns 0 if not all data could be transmitted,
  * and len if all data was transmitted.
- */
+ *
+ *--------------------------------------------------------------------*/
+
 uint32_t
 qcaspi_write_legacy(struct qcaspi *qca, uint8_t *src, uint32_t len)
 {
@@ -206,14 +220,17 @@ qcaspi_write_legacy(struct qcaspi *qca, uint8_t *src, uint32_t len)
 	return len;
 }
 
-/*
+/*====================================================================*
+ *
  * Sends a read command and then receives len
  * bytes of data from the external SPI slave into
  * the buffer at dst.
  *
  * Returns 0 if not all data could be received,
  * and len if all data was received.
- */
+ *
+ *--------------------------------------------------------------------*/
+
 uint32_t
 qcaspi_read_burst(struct qcaspi *qca, uint8_t *dst, uint32_t len)
 {
@@ -241,13 +258,16 @@ qcaspi_read_burst(struct qcaspi *qca, uint8_t *dst, uint32_t len)
 	return len;
 }
 
-/*
+/*====================================================================*
+ *
  * Receives len bytes of data from the external
  * SPI slave into the buffer at dst.
  *
  * Returns 0 if not all data could be received,
  * and len if all data was received.
- */
+ *
+ *--------------------------------------------------------------------*/
+ 
 uint32_t
 qcaspi_read_legacy(struct qcaspi *qca, uint8_t *dst, uint32_t len)
 {
@@ -272,11 +292,14 @@ qcaspi_read_legacy(struct qcaspi *qca, uint8_t *dst, uint32_t len)
 	return len;
 }
 
-/*
+/*====================================================================*
+ *
  * Transmits an sk_buff in legacy or burst mode.
  *
  * Returns -1 on failure, 0 on success.
- */
+ *
+ *--------------------------------------------------------------------*/
+
 int
 qcaspi_tx_frame(struct qcaspi *qca, struct sk_buff *skb)
 {
@@ -314,12 +337,15 @@ qcaspi_tx_frame(struct qcaspi *qca, struct sk_buff *skb)
 	return 0;
 }
 
-/*
+/*====================================================================*
+ *
  * Transmits as many sk_buff's that will fit in
  * the SPI slave write buffer.
  *
  * Returns -1 on failure, 0 on success.
- */
+ *
+ *--------------------------------------------------------------------*/
+
 int
 qcaspi_transmit(struct qcaspi *qca)
 {
@@ -349,12 +375,15 @@ qcaspi_transmit(struct qcaspi *qca)
 	return 0;
 }
 
-/*
+/*====================================================================*
+ *
  * Read the number of bytes available in the SPI slave and
  * then read and process the data from the slave.
  *
  * Returns -1 on error, 0 on success.
- */
+ *
+ *--------------------------------------------------------------------*/
+ 
 int
 qcaspi_receive(struct qcaspi *qca)
 {
@@ -446,10 +475,13 @@ qcaspi_receive(struct qcaspi *qca)
 	return 0;
 }
 
-/*
+/*====================================================================*
+ *
  * Flush the tx queue. This function is only safe to
  * call from the qcaspi_spi_thread.
- */
+ *
+ *--------------------------------------------------------------------*/
+ 
 void
 qcaspi_flush_txq(struct qcaspi *qca)
 {
@@ -466,9 +498,12 @@ qcaspi_flush_txq(struct qcaspi *qca)
 	netif_tx_unlock(qca->dev);
 }
 
-/*
+/*====================================================================*
+ *
  * Manage synchronization with the external SPI slave.
- */
+ *
+ *--------------------------------------------------------------------*/
+ 
 void
 qcaspi_qca7k_sync(struct qcaspi *qca, int event)
 {
@@ -477,7 +512,6 @@ qcaspi_qca7k_sync(struct qcaspi *qca, int event)
 	uint32_t wrbuf_space;
 	static uint32_t reset_count;
 
-	/* CPU ON occured, verify signature */
 	if (event == QCASPI_SYNC_CPUON) {
 		/* Read signature twice, if not valid go back to unknown state. */
 		signature = qcaspi_read_register(qca, SPI_REG_SIGNATURE);
@@ -499,7 +533,6 @@ qcaspi_qca7k_sync(struct qcaspi *qca, int event)
 		}
 	}
 
-	/* In sync. */
 	if (qca->sync == QCASPI_SYNC_READY) {
 		/* Don't check signature after sync in burst mode. */
 		if (!qca->legacy_mode)
@@ -514,7 +547,6 @@ qcaspi_qca7k_sync(struct qcaspi *qca, int event)
 		}
 	}
 
-	/* Reset the device. */
 	if (qca->sync == QCASPI_SYNC_UNKNOWN) {
 		if (qca->legacy_mode) {
 			/* use GPIO to reset QCA7000 */
@@ -535,7 +567,6 @@ qcaspi_qca7k_sync(struct qcaspi *qca, int event)
 		return;
 	}
 
-	/* Currently waiting for CPU on to take us out of reset. */
 	if (qca->sync == QCASPI_SYNC_RESET) {
 		++reset_count;
 		printk(KERN_DEBUG "qcaspi: sync: waiting for CPU on, count %d.\n", reset_count);
@@ -574,10 +605,8 @@ qcaspi_spi_thread(void *data)
 
 		pr_debug("qcaspi: have work to do. int: %d, tx_skb: %p\n", intReq - intSvc, qca->txq.skb[qca->txq.head]);
 
-		/* mantain sync with external device */
 		qcaspi_qca7k_sync(qca, QCASPI_SYNC_UPDATE);
 
-		/* not synced, awaiting reset, or unknown */
 		if (qca->sync != QCASPI_SYNC_READY) {
 			printk(KERN_DEBUG "qcaspi: sync: not ready, turn off carrier and flush\n");
 			netif_carrier_off(qca->dev);
@@ -682,10 +711,8 @@ qcaspi_netdev_open(struct net_device *dev)
 
 	netif_start_queue(qca->dev);
 
-	/* start main thread */
 	qca->spi_thread = kthread_run((void *)qcaspi_spi_thread, qca, QCASPI_MODNAME);
 
-	/* Attach interrupt handle & enable interrupt. */
 	if (gpio_spi_intr_cfg() == 0) {
 		if (!request_irq(dev->irq, qcaspi_intr_handler, 0, QCASPI_MODNAME, qca)) {
 			printk(KERN_ERR "qcaspi: Irq request succeed %d\n", dev->irq);
@@ -715,18 +742,14 @@ qcaspi_netdev_close(struct net_device *dev)
 {
 	struct qcaspi *qca = netdev_priv(dev);
 
-	/* Disable interrupt and free irq. */
 	qcaspi_write_register(qca, SPI_REG_INTR_ENABLE, 0);
 	free_irq(dev->irq, qca);
 
-	/* stop the main thread */
 	kthread_stop(qca->spi_thread);
 	qca->spi_thread = NULL;
 
-	/* can't transmit any more. */
 	netif_stop_queue(dev);
 
-	/* flush out the tx queue */
 	qcaspi_flush_txq(qca);
 
 	return 0;
@@ -752,13 +775,11 @@ qcaspi_netdev_xmit(struct sk_buff *skb, struct net_device *dev)
 	struct sk_buff *tskb;
 	uint8_t pad_len = 0;
 
-	/* need padding? */
 	if (skb->len < QCAFRM_ETHMINLEN) {
 		pad_len = QCAFRM_ETHMINLEN - skb->len;
 	}
 
 #if 1
-	/* room in our queue? should always be true */
 	if (qca->txq.skb[qca->txq.tail]) {
 		printk(KERN_WARNING "qcaspi: queue was unexpectedly full!\n");
 		netif_stop_queue(qca->dev);
@@ -766,7 +787,6 @@ qcaspi_netdev_xmit(struct sk_buff *skb, struct net_device *dev)
 	}
 #endif
 
-	/* not enough head, tail room, or a runt frame, must copy data */
 	if (skb_headroom(skb) < QCAFRM_HEADER_LEN || skb_tailroom(skb) < QCAFRM_FOOTER_LEN + pad_len) {
 		tskb = skb_copy_expand(skb, QCAFRM_HEADER_LEN, QCAFRM_FOOTER_LEN + pad_len, GFP_ATOMIC);
 		if (tskb == NULL) {
@@ -777,7 +797,6 @@ qcaspi_netdev_xmit(struct sk_buff *skb, struct net_device *dev)
 		skb = tskb;
 	}
 
-	/* save original frame length + padding */
 	frame_len = skb->len + pad_len;
 
 	ptmp = skb_push(skb, QCAFRM_HEADER_LEN);
@@ -792,18 +811,17 @@ qcaspi_netdev_xmit(struct sk_buff *skb, struct net_device *dev)
 	QcaFrmCreateFooter(ptmp);
 
 	/* print_hex_dump(KERN_DEBUG, "xmit_frame: ", DUMP_PREFIX_ADDRESS, 16, 1, skb, skb->len, true); */
+
 	pr_debug("qcaspi: Tx-ing packet: Size: 0x%08x\n", skb->len);
 
 	new_tail = qca->txq.tail + 1;
 	if (new_tail >= TX_QUEUE_LEN)
 		new_tail = 0;
 
-	/* queue is full */
 	if (qca->txq.skb[new_tail]) {
 		netif_stop_queue(qca->dev);
 	}
 
-	/* SKB is no longer ours. */
 	qca->txq.skb[qca->txq.tail] = skb;
 	qca->txq.tail = new_tail;
 
@@ -872,7 +890,6 @@ qcaspi_netdev_init(struct net_device *dev)
 {
 	struct qcaspi *qca = netdev_priv(dev);
 	
-	/* Finish setting up the device info. */
 	dev->irq = gpio_spi_intr_get_irq();
 	dev->mtu = QCASPI_MTU;
 	dev->type = ARPHRD_ETHER;
@@ -882,7 +899,6 @@ qcaspi_netdev_init(struct net_device *dev)
 
 	qca->buffer_size = (dev->mtu + VLAN_ETH_HLEN + QCAFRM_HEADER_LEN + QCAFRM_FOOTER_LEN + 4) * 4;
 
-	/* Allocate RX data buffer. */
 	qca->rx_buffer = kmalloc(qca->buffer_size, GFP_ATOMIC);
 	if (!qca->rx_buffer) {
 		return -ENOBUFS;
@@ -996,7 +1012,6 @@ qcaspi_netdev_setup(struct net_device *dev)
 	dev->flags = IFF_MULTICAST;
 	dev->tx_queue_len = 100;
 
-	/* Default MAC address. */
 	memcpy(dev->dev_addr, QCASPI_DEF_MAC_ADDRESS, dev->addr_len);
 
 	qca = netdev_priv(dev);
@@ -1024,7 +1039,6 @@ qcaspi_mod_init(void)
 
 	printk(KERN_INFO "qcaspi: version %s\n", QCASPI_VERSION);
 
-	/* Validate module parameters. */
 	if ((qcaspi_clkspeed < QCASPI_CLK_SPEED_MIN) ||
 	    (qcaspi_clkspeed > QCASPI_CLK_SPEED_MAX) ||
 	    (qcaspi_legacy_mode < QCASPI_LEGACY_MODE_MIN) ||
@@ -1038,7 +1052,6 @@ qcaspi_mod_init(void)
 		return -EINVAL;
 	}
 
-	/* Retrieve the SPI master bus information. */
 	spi_master = spi_busnum_to_master(QCASPI_BUS_ID);
 	if (!spi_master) {
 		kfree(spi_board);
@@ -1047,14 +1060,12 @@ qcaspi_mod_init(void)
 	}
 	printk(KERN_INFO "qcaspi: SPI bus master retrieve from bus number %d\n", QCASPI_BUS_ID);
 
-	/* Create new SPI device */
 	spi_device = spi_new_device(spi_master, &qca_spi_board_info);
 	if (!spi_device) {
 		printk(KERN_ERR "qcaspi: Unable to create new SPI device on bus %d\n", QCASPI_BUS_ID);
 		return -ENODEV;
 	}
 
-	/* Fill new allocated spi board info. */
 	spi_device->max_speed_hz = qcaspi_clkspeed;
 	if (spi_setup(spi_device) < 0) {
 		kfree(spi_device);
@@ -1065,7 +1076,6 @@ qcaspi_mod_init(void)
 	    "legacy_mode=%d, burst_len=%d)\n",
 	    qcaspi_clkspeed, qcaspi_legacy_mode, qcaspi_burst_len);
 
-	/* Allocate the devices */
 	qcaspi_devs = alloc_netdev(sizeof(struct qcaspi), "qca%d", qcaspi_netdev_setup);
 	if (!qcaspi_devs) {
 		kfree(spi_device);
@@ -1086,7 +1096,6 @@ qcaspi_mod_init(void)
 
 	netif_carrier_off(qca->dev);
 
-	/* Register network device */
 	if (register_netdev(qcaspi_devs)) {
 		kfree(spi_device);
 		printk(KERN_ERR "qcaspi: Unable to register network device %s\n", qcaspi_devs->name);
@@ -1133,3 +1142,5 @@ module_exit(qcaspi_mod_exit);
 MODULE_DESCRIPTION("Qualcomm Atheros SPI Driver");
 MODULE_AUTHOR("Qualcomm Atheros Communications");
 MODULE_LICENSE("Dual BSD/GPL");
+MODULE_VERSION(QCASPI_VERSION);
+
